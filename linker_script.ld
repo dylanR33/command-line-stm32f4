@@ -18,34 +18,34 @@ SECTIONS                                              // Controls where input se
 
     .text : 
     {
-        . = ALIGN(4);                                 // Sets the location counter ('.') to the current location counter value aligned upward to the specified amount of bytes.
+        . = ALIGN( 4 );                               // Sets the location counter ('.') to the current location counter value aligned upward to the specified amount of bytes.
 
-        *(.text)                                      // States that all input sections by the name ".text" should be placed within this section of the output file.
-        *(.rodata)
+        *( .text   )                                  // States that all input sections by the name ".text" should be placed within this section of the output file.
+        *( .rodata )
 
-        . = ALIGN(4);
+        . = ALIGN( 4 );
         _etext = .;                                   // Defines a symbol named "_etext" with the value of the current location counter value.
     } >FLASH
 
     .data :
     {
-        . = ALIGN(4);
+        . = ALIGN( 4 );
         _sdata = .;
 
-        *(.data)
+        *( .data )
 
-        . = ALIGN(4)
+        . = ALIGN( 4 )
         _edata = .;
     } >SRAM AT> FLASH                                 // Assigns the sections VMA to the SRAM region and the sections LMA to the FLASH region.
 
     .bss :
     {
-        . = ALIGN(4);
+        . = ALIGN( 4 );
         _sbss = .;
 
-        *(.bss)
+        *( .bss )
 
-        . = ALIGN(4)
+        . = ALIGN( 4 )
         _ebss = .;
     } >SRAM
 }
