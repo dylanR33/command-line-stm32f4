@@ -4,9 +4,14 @@ ENTRY( reset_handler )                                // Specifies programs entr
 
 MEMORY                                                // Describes location and size of blocks of memory in the target.
 {
-    FLASH ( rx ): ORIGIN = 0x80000000, LENGTH = 512K  // Define start of flash memory and its size. (Found in STM32F411 Datasheet, Section 2 / Section 5)
-    SRAM ( rwx ): ORIGIN = 0x20000000, LENGTH = 128K  // Define start of sram and its size. (Found in STM32F411RE Datasheet, Section 5)
+    FLASH ( rx ): ORIGIN = 0x08000000, LENGTH = 512K  // Define start of flash memory and its size. (Found in STM32F411RE Datasheet, Section 3.5)
+    SRAM ( rwx ): ORIGIN = 0x20000000, LENGTH = 128K  // Define start of sram and its size. (Found in STM32F411RE Datasheet, Section 3.7)
 }
+
+// The areas where sections should be placed into memory are discussed in the following areas:
+//      - STM32F411RE Datasheet Section 5
+//      - ""          Reference Manual Section 3.3
+//      - STM32 Cortex-M4 Programming Manual Section 2.2.3
 
                                                       // Describes the memory layout of the output file.
 SECTIONS                                              // Controls where input sections are placed into output sections, their order in the output file, and to which output sections they are allocated.
