@@ -2,12 +2,12 @@
 // initialization address of the stack pointer which should be initialized
 // to point at the end of SRAM.
 #define SRAM_START                 ( 0x20000000U )
-#define SRAM_SIZE                  ( 32U * 1024U )              // Assuming this is 128000 (128K bytes) / 4 bytes plus some wiggle.
+#define SRAM_SIZE                  ( 128U * 1024U )              // 128 * kilobyte (1024 bytes) = 128 kilobytes
 #define SRAM_END                   ( SRAM_START + SRAM_SIZE )
 #define STACK_POINTER_INIT_ADDRESS ( SRAM_END )
 
 #include <stdint.h>
-#define ISR_VECTOR_SIZE_WORDS 114
+#define ISR_VECTOR_SIZE_WORDS 102                                // STM32F411RE Reference Manual Section 10.2
 
 // Declaring system exception handlers of interrupt vector table. Leaving out the rest
 // of the interrupt handlers.
@@ -30,23 +30,22 @@ void systick_handler();         __attribute__( (weak, alias( "default_handler" )
 // The section attribute ensures that it ends up in the correct memory section.
 uint32_t isr_vector[ISR_VECTOR_SIZE_WORDS] __attribute__( ( section( ".isr_vector" ) ) ) = 
 {
-    STACK_POINTER_INIT_ADDRESS,             // Main stack pointer address must be the first address stored as the first word in the interrupt vector table.
-    ( uint32_t )&reset_handler,
-    ( uint32_t )&nmi_handler,
-    ( uint32_t )&hard_fault_handler,
-    ( uint32_t )&mem_manage_handler,
-    ( uint32_t )&bus_fault_handler,
-    ( uint32_t )&usage_fault_handler,
-    0,                                      // Zeros indicate reserved words.
+    STACK_POINTER_INIT_ADDRESS,             // Main stack pointer address must be the first address stored as the first word in the interrupt vector table (Progamming Manual 2.1.3).
+    ( uint32_t )&reset_handler          ,
+    ( uint32_t )&nmi_handler            ,
+    ( uint32_t )&hard_fault_handler     ,
+    ( uint32_t )&mem_manage_handler     ,
+    ( uint32_t )&bus_fault_handler      ,
+    ( uint32_t )&usage_fault_handler    ,
+    0                                   ,   // Zeros indicate reserved words.
+    0                                   ,
+    0                                   ,
+    0                                   ,
+    ( uint32_t )&svcall_handler         ,
+    ( uint32_t )&debug_monitor_handler  ,
     0,
-    0,
-    0,
-    0,
-    ( uint32_t )&svcall_handler,
-    ( uint32_t )&debug_monitor_handler,
-    0,
-    ( uint32_t )&pensv_handler,
-    ( uint32_t )&systick_handler,
+    ( uint32_t )&pensv_handler          ,
+    ( uint32_t )&systick_handler        ,
     // Include rest of the interrupt handlers ...
 };
 
