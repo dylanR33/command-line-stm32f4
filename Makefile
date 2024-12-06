@@ -15,28 +15,39 @@ LDFLAGS=-T $(LINKER_FILE)
 PROGRAMMER=openocd
 PROGRAMMER_FLAGS=-f interface/stlink.cfg -f target/stm32f4x.cfg
 
-all: blink.elf
+SRC_DIR=src
+BUILD_DIR=build
+OBJ_DIR=$(BUILD_DIR)/obj
+
+STM_CMSIS_TEMPLATE=vendor/CMSIS_5/Device/ST/cmsis-device-f4/Source/Templates/system_stm32f4xx.c
+
+# Create list of object files.
+APP_OBJ_FILES=$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(wildcard $(SRC_DIR)/*.c))
+OBJ_CMSIS=$(OBJ_DIR)/system_stm32f4xx.o
+
+all: $(BUILD_DIR)/program.elf
 
 # Note: $^ (the automatic variable) is short-hand for the
 # names of all the prerequisites with spaces between them.
-blink.elf: main.o startup.o system_stm32f4xx.o
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $^ -o blink.elf
+# Note: $@ is short-hand for the name of the target
+$(BUILD_DIR)/program.elf: $(APP_OBJ_FILES) $(OBJ_CMSIS) | $(BUILD_DIR)
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $^ -o $@
 
-main.o: main.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) main.c -c
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) $(CPPFLAGS) $< -c -o $@
 
-startup.o: startup.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) startup.c -c
+$(OBJ_CMSIS): $(STM_CMSIS_TEMPLATE) | $(OBJ_DIR)
+	$(CC) $(CFLAGS) $(CPPFLAGS) $^ -c -o $@
 
-system_stm32f4xx.o: vendor/CMSIS_5/Device/ST/cmsis-device-f4/Source/Templates/system_stm32f4xx.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) vendor/CMSIS_5/Device/ST/cmsis-device-f4/Source/Templates/system_stm32f4xx.c -c
+$(OBJ_DIR) $(BUILD_DIR):
+	@mkdir -p $@
 
 .PHONY: clean
 clean:
-	rm -f *.o *.elf
+	@rm -r $(BUILD_DIR)
 
-flash: blink.elf
-	$(PROGRAMMER) $(PROGRAMMER_FLAGS) -c "program blink.elf verify reset exit"
+flash: $(BUILD_DIR)/program.elf
+	$(PROGRAMMER) $(PROGRAMMER_FLAGS) -c "program $(BUILD_DIR)/program.elf verify reset exit"
 
 
 

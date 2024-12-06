@@ -4,6 +4,7 @@
 #define LED_PIN 5
 
 
+
 void main()
 {
     RCC->AHB1ENR |= ( 1 << RCC_AHB1ENR_GPIOAEN_Pos );       // Set bit zero corresponding to GPIOA.
@@ -17,7 +18,7 @@ void main()
     while (1)
     {
         GPIOA->ODR ^= ( 1 << LED_PIN );                  // Toggle ODR5.
-        for (uint32_t i = 0; i < 1000000; i++);         // Delay.
+        for (uint32_t i = 0; i < 100000; i++);         // Delay.
     }
 }
 
