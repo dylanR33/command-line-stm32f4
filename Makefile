@@ -8,7 +8,7 @@ CPPFLAGS=-DSTM32F411xE \
 		 -Ivendor/CMSIS_5/CMSIS/Core/Include
 
 # Define linker script file.
-LINKER_FILE=linker_script.ld
+LINKER_FILE=system/linker_script.ld
 # Define linker flags.
 LDFLAGS=-T $(LINKER_FILE)
 
@@ -20,21 +20,26 @@ BUILD_DIR=build
 OBJ_DIR=$(BUILD_DIR)/obj
 
 STM_CMSIS_TEMPLATE=vendor/CMSIS_5/Device/ST/cmsis-device-f4/Source/Templates/system_stm32f4xx.c
+STARTUP_FILE=system/startup.c
 
 # Create list of object files.
 APP_OBJ_FILES=$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(wildcard $(SRC_DIR)/*.c))
 OBJ_CMSIS=$(OBJ_DIR)/system_stm32f4xx.o
+OBJ_STARTUP=$(OBJ_DIR)/startup.o
 
 all: $(BUILD_DIR)/program.elf
 
 # Note: $^ (the automatic variable) is short-hand for the
 # names of all the prerequisites with spaces between them.
 # Note: $@ is short-hand for the name of the target
-$(BUILD_DIR)/program.elf: $(APP_OBJ_FILES) $(OBJ_CMSIS) | $(BUILD_DIR)
+$(BUILD_DIR)/program.elf: $(APP_OBJ_FILES) $(OBJ_STARTUP) $(OBJ_CMSIS) | $(BUILD_DIR)
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $^ -o $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) $(CPPFLAGS) $< -c -o $@
+
+$(OBJ_STARTUP): $(STARTUP_FILE) | $(OBJ_DIR)
+	$(CC) $(CFLAGS) $(CPPFLAGS) $^ -c -o $@
 
 $(OBJ_CMSIS): $(STM_CMSIS_TEMPLATE) | $(OBJ_DIR)
 	$(CC) $(CFLAGS) $(CPPFLAGS) $^ -c -o $@
