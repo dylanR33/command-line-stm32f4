@@ -4,8 +4,8 @@ CC=arm-none-eabi-gcc
 CFLAGS=-mcpu=cortex-m4 -mthumb -nostdlib
 # Define compiler pre-processor flags
 CPPFLAGS=-DSTM32F411xE \
-		 -Ivendor/CMSIS_5/Device/ST/cmsis-device-f4/Include \
-		 -Ivendor/CMSIS_5/CMSIS/Core/Include
+		 -ISTM32CubeF4/Drivers/CMSIS/Device/ST/STM32F4xx/Include \
+		 -ISTM32CubeF4/Drivers/CMSIS/Core/Include
 
 # Define linker script file.
 LINKER_FILE=system/linker_script.ld
@@ -19,7 +19,7 @@ SRC_DIR=src
 BUILD_DIR=build
 OBJ_DIR=$(BUILD_DIR)/obj
 
-STM_CMSIS_TEMPLATE=vendor/CMSIS_5/Device/ST/cmsis-device-f4/Source/Templates/system_stm32f4xx.c
+STM_CMSIS_TEMPLATE=STM32CubeF4/Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/system_stm32f4xx.c
 STARTUP_FILE=system/startup.c
 
 # Create list of object files.
@@ -53,6 +53,4 @@ clean:
 
 flash: $(BUILD_DIR)/program.elf
 	$(PROGRAMMER) $(PROGRAMMER_FLAGS) -c "program $(BUILD_DIR)/program.elf verify reset exit"
-
-
 

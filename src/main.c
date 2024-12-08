@@ -18,7 +18,7 @@ void main()
     while (1)
     {
         GPIOA->ODR ^= ( 1 << LED_PIN );                  // Toggle ODR5.
-        for (uint32_t i = 0; i < 100000; i++);         // Delay.
+        for (uint32_t i = 0; i < 1000000; i++);         // Delay.
     }
 }
 
