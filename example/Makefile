@@ -1,5 +1,6 @@
 CLISTM_SRC_DIRS = src
 CLISTM_BUILD_DIR = build
+CLISTM_MODEL_NUM = STM32F411xE
 
 .PHONY: clean
 clean:

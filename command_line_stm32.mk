@@ -1,13 +1,7 @@
-# Plan of attack:
-# 	make work from example directory
-# 		- add checks for necessary variable definitions
-# 		- update readme
-# 		- maybe add check for which OS is in use
-
-
 # Paths that should be defined
 # CLISTM_SRC_DIRS: all directories containing source code
 # CLISTM_BUILD_DIR: top level build directory
+# CLISTM_MODEL_NUM: specific stm mcu model within F4 family
 #
 # Ensure these are defined, else exit
 ifndef CLISTM_SRC_DIRS
@@ -15,6 +9,9 @@ ifndef CLISTM_SRC_DIRS
 endif
 ifndef CLISTM_BUILD_DIR
   $(error CLISTM_BUILD_DIR not defined)
+endif
+ifndef CLISTM_MODEL_NUM
+  $(error CLISTM_MODEL_NUM not defined)
 endif
 
 
@@ -55,7 +52,7 @@ CLISTM_CFLAGS = -mcpu=cortex-m4 -mthumb -nostdlib
 CLISTM_ST_INCLUDE = $(CLISTM_CMSIS)/Device/ST/STM32F4xx/Include
 CLISTM_CORE_INCLUDE = $(CLISTM_CMSIS)/Core/Include
 CLISTM_USR_INC_PATHS = $(addprefix -I, $(CLISTM_PATHS))
-CLISTM_CPPFLAGS = -MMD -MP -I$(CLISTM_ST_INCLUDE) -I$(CLISTM_CORE_INCLUDE) $(CLISTM_USR_INC_PATHS) -DSTM32F411xE
+CLISTM_CPPFLAGS = -MMD -MP -I$(CLISTM_ST_INCLUDE) -I$(CLISTM_CORE_INCLUDE) $(CLISTM_USR_INC_PATHS) -D$(CLISTM_MODEL_NUM)
 CLISTM_LDFLAGS = -T $(CLISTM_LINKER_FILE)
 
 
