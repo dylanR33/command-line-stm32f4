@@ -19,11 +19,11 @@ endif
 CLISTM_THIS_MAKEFILE_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
 
-# System and CMSIS paths
+# System, CMSIS, HAL paths
 CLISTM_SYS_DIR = $(CLISTM_THIS_MAKEFILE_DIR)system
 CLISTM_CMSIS = $(CLISTM_THIS_MAKEFILE_DIR)STM32CubeF4/Drivers/CMSIS
 CLISTM_CMSIS_TEMPLATE = $(CLISTM_CMSIS)/Device/ST/STM32F4xx/Source/Templates
-
+CLISTM_HAL = $(CLISTM_THIS_MAKEFILE_DIR)STM32CubeF4/Drivers/STM32F4xx_HAL_Driver
 
 # Linker script path
 CLISTM_LINKER_FILE = $(CLISTM_SYS_DIR)/linker_script.ld
@@ -51,8 +51,11 @@ CLISTM_CC = arm-none-eabi-gcc
 CLISTM_CFLAGS = -mcpu=cortex-m4 -mthumb -nostdlib
 CLISTM_ST_INCLUDE = $(CLISTM_CMSIS)/Device/ST/STM32F4xx/Include
 CLISTM_CORE_INCLUDE = $(CLISTM_CMSIS)/Core/Include
+
+CLISTM_HAL_INCLUDE = $(CLISTM_HAL)/Inc
+
 CLISTM_USR_INC_PATHS = $(addprefix -I, $(CLISTM_PATHS))
-CLISTM_CPPFLAGS = -MMD -MP -I$(CLISTM_ST_INCLUDE) -I$(CLISTM_CORE_INCLUDE) $(CLISTM_USR_INC_PATHS) -D$(CLISTM_MODEL_NUM)
+CLISTM_CPPFLAGS = -MMD -MP -I$(CLISTM_SYS_DIR) -I$(CLISTM_ST_INCLUDE) -I$(CLISTM_CORE_INCLUDE) -I$(CLISTM_HAL_INCLUDE) $(CLISTM_USR_INC_PATHS) -D$(CLISTM_MODEL_NUM)
 CLISTM_LDFLAGS = -T $(CLISTM_LINKER_FILE)
 
 
@@ -65,8 +68,9 @@ CLISTM_PROGRAM = $(CLISTM_PATHB)/program.$(CLISTM_TARGET_EXTENSION)
 CLISTM_PROGRAMMER = openocd
 CLISTM_PROGRAMMER_FLAGS = -f interface/stlink.cfg -f target/stm32f4x.cfg
 
+
 CLISTM_SYS_PATHO_DIR = $(CLISTM_PATHO)/command_line_stm32
-CLISTM_SYS_SRCS = system_stm32f4xx.o startup.o
+CLISTM_SYS_SRCS = system_stm32f4xx.o startup.o stm32f4xx_hal.o stm32f4xx_hal_cortex.o
 CLISTM_SYS_OBJS = $(addprefix $(CLISTM_SYS_PATHO_DIR)/, $(CLISTM_SYS_SRCS))
 
 # Rules for building program
@@ -82,6 +86,12 @@ $(CLISTM_SYS_PATHO_DIR)/system_stm32f4xx.o: $(CLISTM_CMSIS_TEMPLATE)/system_stm3
 	$(CLISTM_CC) $(CLISTM_CFLAGS) $(CLISTM_CPPFLAGS) -c $< -o $@
 
 $(CLISTM_SYS_PATHO_DIR)/startup.o: $(CLISTM_SYS_DIR)/startup.c | $(CLISTM_BUILD_PATHS)
+	$(CLISTM_CC) $(CLISTM_CFLAGS) $(CLISTM_CPPFLAGS) -c $< -o $@
+
+$(CLISTM_SYS_PATHO_DIR)/stm32f4xx_hal.o: $(CLISTM_HAL)/Src/stm32f4xx_hal.c
+	$(CLISTM_CC) $(CLISTM_CFLAGS) $(CLISTM_CPPFLAGS) -c $< -o $@
+
+$(CLISTM_SYS_PATHO_DIR)/stm32f4xx_hal_cortex.o: $(CLISTM_HAL)/Src/stm32f4xx_hal_cortex.c
 	$(CLISTM_CC) $(CLISTM_CFLAGS) $(CLISTM_CPPFLAGS) -c $< -o $@
 
 $(CLISTM_BUILD_PATHS):

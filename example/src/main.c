@@ -1,5 +1,7 @@
 #include <stdint.h>
+
 #include "stm32f4xx.h"
+#include "stm32f4xx_hal.h"
 #include "led.h"
 
 #define LED_PIN 5
@@ -7,6 +9,10 @@
 
 void main()
 {
+
+    HAL_Init();
+
+
     RCC_TypeDef* rcc = (RCC_TypeDef*)RCC;
     ledPeripheralClockEnable(&(rcc->AHB1ENR), RCC_AHB1ENR_GPIOAEN_Pos);
 
