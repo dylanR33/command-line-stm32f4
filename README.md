@@ -35,7 +35,7 @@ CLISTM_SRC_DIRS = path_to/source_dir1 path_to/source_dir2
 
 CLISTM_BUILD_DIR = path_to/build_dir
 
-CLISTM_STM_MODEL = STM32F411xE
+CLISTM_MODEL_NUM = STM32F411xE
 
 include path_to/command_line_stm32/command_line_stm32.mk
 ```
