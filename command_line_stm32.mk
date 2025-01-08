@@ -65,20 +65,23 @@ CLISTM_PROGRAM = $(CLISTM_PATHB)/program.$(CLISTM_TARGET_EXTENSION)
 CLISTM_PROGRAMMER = openocd
 CLISTM_PROGRAMMER_FLAGS = -f interface/stlink.cfg -f target/stm32f4x.cfg
 
+CLISTM_SYS_PATHO_DIR = $(CLISTM_PATHO)/command_line_stm32
+CLISTM_SYS_SRCS = system_stm32f4xx.o startup.o
+CLISTM_SYS_OBJS = $(addprefix $(CLISTM_SYS_PATHO_DIR)/, $(CLISTM_SYS_SRCS))
 
 # Rules for building program
 build: $(CLISTM_PROGRAM) | $(CLISTM_BUILD_PATHS)
 
-$(CLISTM_PROGRAM): $(CLISTM_USR_OBJS) $(CLISTM_PATHO)/command_line_stm32/system_stm32f4xx.o $(CLISTM_PATHO)/command_line_stm32/startup.o | $(CLISTM_BUILD_PATHS)
+$(CLISTM_PROGRAM): $(CLISTM_USR_OBJS) $(CLISTM_SYS_OBJS) | $(CLISTM_BUILD_PATHS)
 	$(CLISTM_CC) $(CLISTM_CFLAGS) $(CLISTM_CPPFLAGS) $(CLISTM_LDFLAGS) $^ -o $@
 
 $(CLISTM_PATHO)/%.o: %.c | $(CLISTM_BUILD_PATHS)
 	$(CLISTM_CC) $(CLISTM_CFLAGS) $(CLISTM_CPPFLAGS) -c $< -o $@
 
-$(CLISTM_PATHO)/command_line_stm32/system_stm32f4xx.o: $(CLISTM_CMSIS_TEMPLATE)/system_stm32f4xx.c | $(CLISTM_BUILD_PATHS)
+$(CLISTM_SYS_PATHO_DIR)/system_stm32f4xx.o: $(CLISTM_CMSIS_TEMPLATE)/system_stm32f4xx.c | $(CLISTM_BUILD_PATHS)
 	$(CLISTM_CC) $(CLISTM_CFLAGS) $(CLISTM_CPPFLAGS) -c $< -o $@
 
-$(CLISTM_PATHO)/command_line_stm32/startup.o: $(CLISTM_SYS_DIR)/startup.c | $(CLISTM_BUILD_PATHS)
+$(CLISTM_SYS_PATHO_DIR)/startup.o: $(CLISTM_SYS_DIR)/startup.c | $(CLISTM_BUILD_PATHS)
 	$(CLISTM_CC) $(CLISTM_CFLAGS) $(CLISTM_CPPFLAGS) -c $< -o $@
 
 $(CLISTM_BUILD_PATHS):
