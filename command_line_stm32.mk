@@ -48,7 +48,8 @@ CLISTM_USR_DEPS = $(patsubst %.c, $(CLISTM_PATHO)/%.d, $(CLISTM_USR_SRCS))
 
 # Compilation variables
 CLISTM_CC = arm-none-eabi-gcc
-CLISTM_CFLAGS = -mcpu=cortex-m4 -mthumb -nostdlib
+CLISTM_SPEC_FLAG = --specs=nano.specs
+CLISTM_CFLAGS = -mcpu=cortex-m4 -mthumb $(CLISTM_SPEC_FLAG)
 CLISTM_ST_INCLUDE = $(CLISTM_CMSIS)/Device/ST/STM32F4xx/Include
 CLISTM_CORE_INCLUDE = $(CLISTM_CMSIS)/Core/Include
 
