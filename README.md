@@ -63,7 +63,7 @@ CLISTM_SRC_DIRS: directories containing source code
 
 CLISTM_BUILD_DIR: your projects build directory
 
-CLISTM_STM_MODEL: the specific STM32 model number within the F4 family (See options below)
+CLISTM_MODEL_NUM: the specific STM32 model number within the F4 family (See options below)
 
 
 ## List of supported definitions for CLISTM_MODEL_NUM
