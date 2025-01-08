@@ -7,18 +7,20 @@
 
 void main()
 {
-    ledPeripheralClockEnable(RCC, RCC_AHB1ENR_GPIOAEN_Pos);
+    RCC_TypeDef* rcc = (RCC_TypeDef*)RCC;
+    ledPeripheralClockEnable(&(rcc->AHB1ENR), RCC_AHB1ENR_GPIOAEN_Pos);
 
-    volatile uint32_t dummy;                            // Dummy reads to wait for peripheral clock to be enabled.
-    dummy = RCC->AHB1ENR;
-    dummy = RCC->AHB1ENR;
+    volatile uint32_t dummy;    // Dummy reads to wait for peripheral clock to be enabled.
+    dummy = rcc->AHB1ENR;
+    dummy = rcc->AHB1ENR;
 
-    ledOutputMode(GPIOA, GPIO_MODER_MODER5_Pos);
+    GPIO_TypeDef* gpio_a = (GPIO_TypeDef*)GPIOA;
+    ledOutputMode(&(gpio_a->MODER), GPIO_MODER_MODER5_Pos);
 
     while (1)
     {
-        ledToggle(GPIOA, LED_PIN);
-        for (uint32_t i = 0; i < 100000; i++);         // Delay.
+        ledToggle(&(gpio_a->ODR), LED_PIN);
+        for (uint32_t i = 0; i < 100000; i++);   // Delay.
     }
 }
 
