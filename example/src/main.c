@@ -96,7 +96,7 @@ void main()
     //}
 }
 
-void systick_handler()
+void Systick_Handler()
 {
     HAL_IncTick();
 }

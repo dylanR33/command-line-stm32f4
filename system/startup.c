@@ -13,17 +13,17 @@
 // of the interrupt handlers.
 // Aliasing handlers to the default handler and declaring them weak so they can be overridden
 // later in the application code as neccessary.
-void reset_handler();
-void default_handler();
-void nmi_handler()             __attribute__( (weak, alias( "default_handler" ) ) );
-void hard_fault_handler()      __attribute__( (weak, alias( "default_handler" ) ) );
-void mem_manage_handler()      __attribute__( (weak, alias( "default_handler" ) ) );
-void bus_fault_handler()       __attribute__( (weak, alias( "default_handler" ) ) );
-void usage_fault_handler()     __attribute__( (weak, alias( "default_handler" ) ) );
-void svcall_handler()          __attribute__( (weak, alias( "default_handler" ) ) );
-void debug_monitor_handler()   __attribute__( (weak, alias( "default_handler" ) ) );
-void pensv_handler()           __attribute__( (weak, alias( "default_handler" ) ) );
-void systick_handler()         __attribute__( (weak, alias( "default_handler" ) ) );
+void Reset_Handler();
+void Default_Handler();
+void NMI_Handler()            __attribute__( (weak, alias( "Default_Handler" ) ) );
+void HardFault_Handler()      __attribute__( (weak, alias( "Default_Handler" ) ) );
+void MemManage_Handler()      __attribute__( (weak, alias( "Default_Handler" ) ) );
+void BusFault_Handler()       __attribute__( (weak, alias( "Default_Handler" ) ) );
+void UsageFault_Handler()     __attribute__( (weak, alias( "Default_Handler" ) ) );
+void SVCall_Handler()         __attribute__( (weak, alias( "Default_Handler" ) ) );
+void DebugMonitor_Handler()   __attribute__( (weak, alias( "Default_Handler" ) ) );
+void PendSV_Handler()         __attribute__( (weak, alias( "Default_Handler" ) ) );
+void Systick_Handler()        __attribute__( (weak, alias( "Default_Handler" ) ) );
 // Declare rest of interrupt handlers.
 
 // Define isr_vector table.
@@ -31,25 +31,25 @@ void systick_handler()         __attribute__( (weak, alias( "default_handler" ) 
 uint32_t isr_vector[ISR_VECTOR_SIZE_WORDS] __attribute__( ( section( ".isr_vector" ) ) ) = 
 {
     STACK_POINTER_INIT_ADDRESS,             // Main stack pointer address must be the first address stored as the first word in the interrupt vector table (Progamming Manual 2.1.3).
-    ( uint32_t )&reset_handler          ,
-    ( uint32_t )&nmi_handler            ,
-    ( uint32_t )&hard_fault_handler     ,
-    ( uint32_t )&mem_manage_handler     ,
-    ( uint32_t )&bus_fault_handler      ,
-    ( uint32_t )&usage_fault_handler    ,
+    ( uint32_t )&Reset_Handler          ,
+    ( uint32_t )&NMI_Handler            ,
+    ( uint32_t )&HardFault_Handler     ,
+    ( uint32_t )&MemManage_Handler     ,
+    ( uint32_t )&BusFault_Handler      ,
+    ( uint32_t )&UsageFault_Handler    ,
     0                                   ,   // Zeros indicate reserved words.
     0                                   ,
     0                                   ,
     0                                   ,
-    ( uint32_t )&svcall_handler         ,
-    ( uint32_t )&debug_monitor_handler  ,
+    ( uint32_t )&SVCall_Handler         ,
+    ( uint32_t )&DebugMonitor_Handler  ,
     0,
-    ( uint32_t )&pensv_handler          ,
-    ( uint32_t )&systick_handler        ,
+    ( uint32_t )&PendSV_Handler          ,
+    ( uint32_t )&Systick_Handler        ,
     // Include rest of the interrupt handlers ...
 };
 
-void default_handler()
+void Default_Handler()
 {
     while (1);
 }
@@ -60,7 +60,7 @@ void main();
 void __libc_init_array();
 
 // This is defined as the program entry point within the linker script.
-void reset_handler()
+void Reset_Handler()
 {
     // Copy .data from FLASH memory to SRAM memory.
     uint32_t data_size  = ( uint32_t )&_edata - ( uint32_t )&_sdata;
@@ -81,8 +81,9 @@ void reset_handler()
         bss[ i ] = 0;
     }
     
-    // Call main function.
+    // Call Newlib initialization function.
     __libc_init_array();
+    // Call main function.
     main();
 }
 

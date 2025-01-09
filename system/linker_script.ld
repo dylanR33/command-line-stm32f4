@@ -1,4 +1,4 @@
-ENTRY( reset_handler )                                /* 
+ENTRY( Reset_Handler )                                /* 
                                                          Specifies programs entry point. Startup code will 
                                                          have reset_handler() function to handle all memory 
                                                          initialization, so this will be the starting point. 
