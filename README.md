@@ -28,8 +28,8 @@ Please download them with your preferred package manager.
 
 
 ## Usage
-Before continuing ensure you have read the section "Necessary Variable Definitions" 
-below.
+Before continuing ensure you have read the sections [Necessary Variable Definitions](#necessary-variable-definitions) 
+and [Optional Variable Definitions](#optional-variable-definitions) below.
 
 Your project should contain a makefile of its own which needs to contain two things
 
@@ -56,11 +56,11 @@ source files and flash the executable onto your target hardware. These rules are
 `build` and `flash` respectively. To invoke them run the following from the 
 directory containing your own makefile.
 ```
-make build // compiles source files
+make build
 ```
 followed by
 ```
-make flash // flashes program onto target hardware
+make flash
 ```
 
 Alternatively simply use `flash` to build out of date files and flash the program 
@@ -74,20 +74,21 @@ The following paths should be defined for the makefile to work correctly.
 
 `CLISTM_BUILD_DIR`: your projects build directory
 
-`CLISTM_MODEL_NUM`: the specific STM32 model number within the F4 family (See options in 
-section "List of Supported Definitions for CLISTM_MODEL_NUM").
+`CLISTM_MODEL_NUM`: the specific STM32 model number within the F4 family (See options 
+[here](#list-of-supported-definitions-for-clistm_model_num).
 
 
 ## Optional Variable Definitions
 The variable `CLISTM_HAL_MODULES` is an optional variable and if used should specify the 
-HAL modules the user would like to incorporate into their build (see options in section 
-"List of supported HAL modules"). When used the makefile also incorporates the base HAL 
-files necessary to use the other modules. If not defined no HAL modules will be part of the build.
+HAL modules the user would like to incorporate into their build (see options 
+[here](#list-of-supported-HAL-modules-(definitions-for-clistm_hal_modules)). When used 
+the makefile also incorporates the base HAL files necessary to use the other modules. 
+If not defined no HAL modules will be part of the build.
 
 The variable `CLISTM_LINKER_FILE` is an optional variable which defines the path to a user 
 provided linker file to use during the linking process. If not defined a default linker file is 
 used which is targeted for the `STM32F411xE`. See directory `templates` for a linker file 
-template to use as a starting point. The main changes necessary are within the MEMORY section.
+template to use as a starting point. The main changes necessary are within the `MEMORY` section.
 
 
 ## Minimal Necessary Configuration When Using HAL and Template
@@ -102,7 +103,7 @@ Some files to get you started for a main and a linker file.
 
 
 ## Examples
-The directory `examples` contains a minimal examples of how to incorperate this repository 
+The directory `examples` contains minimal examples of how to incorperate this repository 
 into a project.
 
 
