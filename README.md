@@ -33,8 +33,7 @@ and [Optional Variable Definitions](#optional-variable-definitions) below.
 
 Your project should contain a makefile of its own which needs to contain two things
 
-1. Definitions for the variables outlined in the sections "Necessary Variable 
-Definitions" and "Optional Variable Definitions".
+1. Definitions for the variables outlined in the sections just mentioned
 
 2. Inclusion of the makefile `command_line_stm32.mk` found within this repository
 
@@ -75,13 +74,13 @@ The following paths should be defined for the makefile to work correctly.
 `CLISTM_BUILD_DIR`: your projects build directory
 
 `CLISTM_MODEL_NUM`: the specific STM32 model number within the F4 family (See options 
-[here](#list-of-supported-definitions-for-clistm_model_num).
+[here](#list-of-supported-definitions-for-clistm_model_num)).
 
 
 ## Optional Variable Definitions
 The variable `CLISTM_HAL_MODULES` is an optional variable and if used should specify the 
 HAL modules the user would like to incorporate into their build (see options 
-[here](#list-of-supported-HAL-modules-(definitions-for-clistm_hal_modules)). When used 
+[here](#list-of-supported-hal-modules-(definitions-for-clistm_hal_modules))). When used 
 the makefile also incorporates the base HAL files necessary to use the other modules. 
 If not defined no HAL modules will be part of the build.
 
