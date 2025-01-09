@@ -29,19 +29,30 @@ SECTIONS                                              /* Controls where input se
     {
         . = ALIGN( 4 );                               /* Sets the location counter ('.') to the current location counter value aligned upward to the specified amount of bytes. */
 
-        *( .text   )                                  /* States that all input sections by the name ".text" should be placed within this section of the output file. */
-        *( .rodata )
+        *( .text     )                                /* States that all input sections by the name ".text" should be placed within this section of the output file. */
+        *( .text.*   )
+        *( .rodata   )
+        *( .rodata.* )
+        KEEP( *(.init) )
+        KEEP( *(.fini) )
+        *( .eh_frame )
+        *( .ARM.exidx )
 
         . = ALIGN( 4 );
         _etext = .;                                   /* Defines a symbol named "_etext" with the value of the current location counter value. */
     } >FLASH
+
+    _sidata = LOADADDR( .data );                      /* Esures the end of the text section will be the same as the load address of the data section. */
 
     .data :
     {
         . = ALIGN( 4 );
         _sdata = .;
 
-        *( .data )
+        *( .data   )
+        *( .data.* )
+        KEEP( *(.init_array) )
+        KEEP( *(.fini_array) )
 
         . = ALIGN( 4 );
         _edata = .;
@@ -53,7 +64,8 @@ SECTIONS                                              /* Controls where input se
         _sbss = .;
         __bss_start__ = _sbss;
 
-        *( .bss )
+        *( .bss   )
+        *( .bss.* )
 
         . = ALIGN( 4 );
         _ebss = .;

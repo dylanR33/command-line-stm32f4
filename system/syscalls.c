@@ -1,7 +1,13 @@
 #include <sys/stat.h>
+#include <sys/times.h>
 #include <errno.h>
 #undef errno
 extern int errno;
+
+void _exit(int exit_code) {
+    while (1) {
+    }
+}
 
 int _close(int file) {
   return -1;
@@ -55,18 +61,23 @@ int _read(int file, char *ptr, int len) {
   return 0;
 }
 
+register char * stack_ptr asm("sp");
+
 caddr_t _sbrk(int incr) {
-  extern char _end;		/* Defined by the linker */
+  extern char __bss_end__;		/* Defined by the linker */
   static char *heap_end;
   char *prev_heap_end;
  
   if (heap_end == 0) {
-    heap_end = &_end;
+    heap_end = &__bss_end__;
   }
+
   prev_heap_end = heap_end;
+
   if (heap_end + incr > stack_ptr) {
-    write (1, "Heap and stack collision\n", 25);
-    abort ();
+      while (1) {
+          // Heap and stack collision
+      }
   }
 
   heap_end += incr;
@@ -96,7 +107,7 @@ int _write(int file, char *ptr, int len) {
   int todo;
 
   for (todo = 0; todo < len; todo++) {
-    outbyte (*ptr++);
+    //outbyte (*ptr++);
   }
   return len;
 }

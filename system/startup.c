@@ -55,16 +55,17 @@ void default_handler()
 }
 
 // Declare the symbols defined within the linker script. Extern means these variables are defined in a seperate file.
-extern uint32_t _etext, _sdata, _edata, _sbss, _ebss;
+extern uint32_t _etext, _sdata, _edata, _sbss, _ebss, _sidata;
 void main();
+void __libc_init_array();
 
 // This is defined as the program entry point within the linker script.
 void reset_handler()
 {
     // Copy .data from FLASH memory to SRAM memory.
     uint32_t data_size  = ( uint32_t )&_edata - ( uint32_t )&_sdata;
-    uint8_t* flash_data = ( uint8_t* )&_etext;
-    uint8_t* sram_data  = ( uint8_t* )&_sdata;
+    uint8_t* flash_data = ( uint8_t* )&_sidata; // Data load address (in flash memory)
+    uint8_t* sram_data  = ( uint8_t* )&_sdata;  // Data virtual address (in sram)
 
     for ( uint32_t i = 0; i < data_size; i++ )
     {
@@ -81,6 +82,7 @@ void reset_handler()
     }
     
     // Call main function.
+    __libc_init_array();
     main();
 }
 

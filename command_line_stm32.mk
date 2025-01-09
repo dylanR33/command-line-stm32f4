@@ -73,11 +73,11 @@ CLISTM_PROGRAMMER_FLAGS = -f interface/stlink.cfg -f target/stm32f4x.cfg
 CLISTM_SYS_PATHO_DIR = $(CLISTM_PATHO)/command_line_stm32
 
 CLISTM_HAL_SRC_PREFIX = stm32f4xx_hal_
-CLISTM_HAL_MODULES = gpio
+CLISTM_HAL_MODULES = gpio rcc
 CLISTM_HAL_OBJS = $(addsuffix .o, $(addprefix $(CLISTM_SYS_PATHO_DIR)/$(CLISTM_HAL_SRC_PREFIX), $(CLISTM_HAL_MODULES)))
 
 
-CLISTM_SYS_SRCS = system_stm32f4xx.o startup.o stm32f4xx_hal.o stm32f4xx_hal_cortex.o
+CLISTM_SYS_SRCS = system_stm32f4xx.o startup.o syscalls.o stm32f4xx_hal.o stm32f4xx_hal_cortex.o
 CLISTM_SYSTEM_OBJS = $(addprefix $(CLISTM_SYS_PATHO_DIR)/, $(CLISTM_SYS_SRCS))
 
 
@@ -94,6 +94,9 @@ $(CLISTM_SYS_PATHO_DIR)/system_stm32f4xx.o: $(CLISTM_CMSIS_TEMPLATE)/system_stm3
 	$(CLISTM_CC) $(CLISTM_CFLAGS) $(CLISTM_CPPFLAGS) -c $< -o $@
 
 $(CLISTM_SYS_PATHO_DIR)/startup.o: $(CLISTM_SYS_DIR)/startup.c | $(CLISTM_BUILD_PATHS)
+	$(CLISTM_CC) $(CLISTM_CFLAGS) $(CLISTM_CPPFLAGS) -c $< -o $@
+
+$(CLISTM_SYS_PATHO_DIR)/syscalls.o: $(CLISTM_SYS_DIR)/syscalls.c | $(CLISTM_BUILD_PATHS)
 	$(CLISTM_CC) $(CLISTM_CFLAGS) $(CLISTM_CPPFLAGS) -c $< -o $@
 
 $(CLISTM_SYS_PATHO_DIR)/stm32f4xx_hal.o: $(CLISTM_HAL)/Src/stm32f4xx_hal.c
