@@ -33,8 +33,8 @@ CLISTM_HAL = $(CLISTM_THIS_MAKEFILE_DIR)STM32CubeF4/Drivers/STM32F4xx_HAL_Driver
 CLISTM_HAL_SRC_PREFIX = stm32f4xx_hal_
 
 
-# Linker script path
-CLISTM_LINKER_FILE = $(CLISTM_SYS_DIR)/linker_script.ld
+# Default linker script path if not already set by user
+CLISTM_LINKER_FILE ?= $(CLISTM_SYS_DIR)/linker_script.ld
 
 
 # Source code paths

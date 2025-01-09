@@ -17,6 +17,15 @@ Use the following command to clone this repository into your project:
 git clone --recurse-submodules https://github.com/dylanR33/command_line_stm32.git
 ```
 
+## Necessary Software
+The following are software packages necessary to use this repository.
+
+`arm-none-eabi-gcc`
+`arm-none-eabi-newlib`
+`GNU make`
+
+Please download them with your preferred package manager.
+
 
 ## Usage
 Before continuing ensure you have read the section "Necessary Variable Definitions" 
@@ -25,7 +34,7 @@ below.
 Your project should contain a makefile of its own which needs to contain two things
 
 1. Definitions for the variables outlined in the sections "Necessary Variable 
-Definitions" and "Optional Variable Definition".
+Definitions" and "Optional Variable Definitions".
 
 2. Inclusion of the makefile `command_line_stm32.mk` found within this repository
 
@@ -69,36 +78,43 @@ The following paths should be defined for the makefile to work correctly.
 section "List of Supported Definitions for CLISTM_MODEL_NUM").
 
 
-## Optional Variable Definition
+## Optional Variable Definitions
 The variable `CLISTM_HAL_MODULES` is an optional variable and if used should specify the 
 HAL modules the user would like to incorporate into their build (see options in section 
-"List of supported HAL modules"). When used the makefile 
-also incorporates the base HAL files necessary to use the other modules.
+"List of supported HAL modules"). When used the makefile also incorporates the base HAL 
+files necessary to use the other modules. If not defined no HAL modules will be part of the build.
 
-If not defined no HAL modules will be part of the build.
+The variable `CLISTM_LINKER_FILE` is an optional variable which defines the path to a user 
+provided linker file to use during the linking process. If not defined a default linker file is 
+used which is targeted for the `STM32F411xE`. See directory `templates` for a linker file 
+template to use as a starting point. The main changes necessary are within the MEMORY section.
 
 
 ## Minimal Necessary Configuration When Using HAL and Template
 Before any application or HAL peripheral module code runs the user should call the 
 HAL function HAL_Init() and proceedingly configure the system clock. Within the 
-directory 'template' a minimal configuration is provided along with a simple main() 
+directory `templates` a minimal configuration is provided along with a simple main() 
 and Systick_Handler() definition for using the HAL provided HAL_Delay() function.
+
+
+## Templates
+Some files to get you started for a main and a linker file.
 
 
 ## Examples
 The directory `examples` contains a minimal examples of how to incorperate this repository 
-into a project. Note that these examples assume `CLISTM_MODEL_NUM` is defined as `STM32F411XE`
+into a project.
 
 
 ## List of Supported Definitions for CLISTM_MODEL_NUM
 ```
-STM32F401XC STM32F411XE STM32F417XX STM32F469XX 
-STM32F401XE STM32F412CX STM32F423XX STM32F479XX
-STM32F405XX STM32F412RX STM32F427XX 
-STM32F407XX STM32F412VX STM32F429XX 
-STM32F410CX STM32F412ZX STM32F437XX
-STM32F410RX STM32F413XX STM32F439XX
-STM32F410TX STM32F415XX STM32F446XX
+STM32F401xC STM32F411xE STM32F417xx STM32F469xx 
+STM32F401xE STM32F412Cx STM32F423xx STM32F479xx
+STM32F405xx STM32F412Rx STM32F427xx 
+STM32F407xx STM32F412Vx STM32F429xx 
+STM32F410Cx STM32F412Zx STM32F437xx
+STM32F410Rx STM32F413xx STM32F439xx
+STM32F410Tx STM32F415xx STM32F446xx
 ```
 
 
