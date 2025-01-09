@@ -80,9 +80,8 @@ The following paths should be defined for the makefile to work correctly.
 ## Optional Variable Definitions
 The variable `CLISTM_HAL_MODULES` is an optional variable and if used should specify the 
 HAL modules the user would like to incorporate into their build (see options 
-[here](#list-of-supported-hal-modules:-definitions-for-clistm_hal_modules)). When used 
-the makefile also incorporates the base HAL files necessary to use the other modules. 
-If not defined no HAL modules will be part of the build.
+[here](#list-of-supported-hal-modules)). When used the makefile also incorporates the base 
+HAL files necessary to use the other modules. If not defined no HAL modules will be part of the build.
 
 The variable `CLISTM_LINKER_FILE` is an optional variable which defines the path to a user 
 provided linker file to use during the linking process. If not defined a default linker file is 
@@ -118,7 +117,7 @@ STM32F410Tx STM32F415xx STM32F446xx
 ```
 
 
-## List of supported HAL modules: Definitions for CLISTM_HAL_MODULES
+## List of supported HAL modules
 ```
 adc               adc_ex          can
 cec               crc             cryp
