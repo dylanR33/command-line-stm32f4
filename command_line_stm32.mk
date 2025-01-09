@@ -3,7 +3,10 @@
 # CLISTM_BUILD_DIR: top level build directory
 # CLISTM_MODEL_NUM: specific stm mcu model within F4 family
 #
-# Ensure these are defined, else exit
+# Optional Define
+# CLISTM_HAL_MODULES: HAL modules to incorporate into build
+#
+# Ensure necessary defines exist, else exit
 ifndef CLISTM_SRC_DIRS
   $(error CLISTM_SRC_DIRS not defined)
 endif
@@ -25,6 +28,11 @@ CLISTM_CMSIS = $(CLISTM_THIS_MAKEFILE_DIR)STM32CubeF4/Drivers/CMSIS
 CLISTM_CMSIS_TEMPLATE = $(CLISTM_CMSIS)/Device/ST/STM32F4xx/Source/Templates
 CLISTM_HAL = $(CLISTM_THIS_MAKEFILE_DIR)STM32CubeF4/Drivers/STM32F4xx_HAL_Driver
 
+
+# Prefix to HAL source files
+CLISTM_HAL_SRC_PREFIX = stm32f4xx_hal_
+
+
 # Linker script path
 CLISTM_LINKER_FILE = $(CLISTM_SYS_DIR)/linker_script.ld
 
@@ -36,8 +44,21 @@ CLISTM_PATHS = $(CLISTM_SRC_DIRS)
 # Build paths
 CLISTM_PATHB = $(CLISTM_BUILD_DIR)/command_line_stm32_build
 CLISTM_PATHO = $(CLISTM_PATHB)/objs
-CLISTM_PATHO_DIRS = $(addprefix $(CLISTM_PATHO)/, $(CLISTM_PATHS) command_line_stm32)
+CLISTM_ESSENTIAL_PATHO_DIR = $(CLISTM_PATHO)/command_line_stm32
+CLISTM_PATHO_DIRS = $(addprefix $(CLISTM_PATHO)/, $(CLISTM_PATHS)) $(CLISTM_ESSENTIAL_PATHO_DIR)
 CLISTM_BUILD_PATHS = $(CLISTM_PATHB) $(CLISTM_PATHO) $(CLISTM_PATHO_DIRS)
+
+
+# Essential and optionally HAL source files and corresponding object and dependancy files
+CLISTM_ESSENTIAL_SRCS = system_stm32f4xx.o startup.o syscalls.o
+ifdef CLISTM_HAL_MODULES
+  $(info HAL will be incorporated into build)
+  CLISTM_ESSENTIAL_SRCS += stm32f4xx_hal.o stm32f4xx_hal_cortex.o stm32f4xx_hal_rcc.o
+  CLISTM_HAL_OBJS = $(addsuffix .o, $(addprefix $(CLISTM_ESSENTIAL_PATHO_DIR)/$(CLISTM_HAL_SRC_PREFIX), $(CLISTM_HAL_MODULES)))
+  CLISTM_HAL_DEPS = $(patsubst %.o, %.d, $(CLISTM_HAL_OBJS))
+endif
+CLISTM_ESSENTIAL_OBJS = $(addprefix $(CLISTM_ESSENTIAL_PATHO_DIR)/, $(CLISTM_ESSENTIAL_SRCS))
+CLISTM_ESSENTIAL_DEPS = $(patsubst %.o, %.d, $(CLISTM_ESSENTIAL_OBJS))
 
 
 # User source fles and corresponding object and dependancy files
@@ -52,9 +73,7 @@ CLISTM_SPEC_FLAG = --specs=nano.specs
 CLISTM_CFLAGS = -mcpu=cortex-m4 -mthumb $(CLISTM_SPEC_FLAG)
 CLISTM_ST_INCLUDE = $(CLISTM_CMSIS)/Device/ST/STM32F4xx/Include
 CLISTM_CORE_INCLUDE = $(CLISTM_CMSIS)/Core/Include
-
 CLISTM_HAL_INCLUDE = $(CLISTM_HAL)/Inc
-
 CLISTM_USR_INC_PATHS = $(addprefix -I, $(CLISTM_PATHS))
 CLISTM_CPPFLAGS = -MMD -MP -I$(CLISTM_SYS_DIR) -I$(CLISTM_ST_INCLUDE) -I$(CLISTM_CORE_INCLUDE) -I$(CLISTM_HAL_INCLUDE) $(CLISTM_USR_INC_PATHS) -D$(CLISTM_MODEL_NUM)
 CLISTM_LDFLAGS = -T $(CLISTM_LINKER_FILE)
@@ -70,46 +89,37 @@ CLISTM_PROGRAMMER = openocd
 CLISTM_PROGRAMMER_FLAGS = -f interface/stlink.cfg -f target/stm32f4x.cfg
 
 
-CLISTM_SYS_PATHO_DIR = $(CLISTM_PATHO)/command_line_stm32
-
-CLISTM_HAL_SRC_PREFIX = stm32f4xx_hal_
-CLISTM_HAL_MODULES = gpio
-CLISTM_HAL_OBJS = $(addsuffix .o, $(addprefix $(CLISTM_SYS_PATHO_DIR)/$(CLISTM_HAL_SRC_PREFIX), $(CLISTM_HAL_MODULES)))
-
-
-CLISTM_SYS_SRCS = system_stm32f4xx.o startup.o syscalls.o stm32f4xx_hal.o stm32f4xx_hal_cortex.o stm32f4xx_hal_rcc.o
-CLISTM_SYSTEM_OBJS = $(addprefix $(CLISTM_SYS_PATHO_DIR)/, $(CLISTM_SYS_SRCS))
-
-
 # Rules for building program
 build: $(CLISTM_PROGRAM) | $(CLISTM_BUILD_PATHS)
 
-$(CLISTM_PROGRAM): $(CLISTM_USR_OBJS) $(CLISTM_SYSTEM_OBJS) $(CLISTM_HAL_OBJS) | $(CLISTM_BUILD_PATHS)
+$(CLISTM_PROGRAM): $(CLISTM_USR_OBJS) $(CLISTM_ESSENTIAL_OBJS) $(CLISTM_HAL_OBJS) | $(CLISTM_BUILD_PATHS)
 	$(CLISTM_CC) $(CLISTM_CFLAGS) $(CLISTM_CPPFLAGS) $(CLISTM_LDFLAGS) $^ -o $@
 
+# Rule for user files
 $(CLISTM_PATHO)/%.o: %.c | $(CLISTM_BUILD_PATHS)
 	$(CLISTM_CC) $(CLISTM_CFLAGS) $(CLISTM_CPPFLAGS) -c $< -o $@
 
-$(CLISTM_SYS_PATHO_DIR)/system_stm32f4xx.o: $(CLISTM_CMSIS_TEMPLATE)/system_stm32f4xx.c | $(CLISTM_BUILD_PATHS)
+# Rules for essential source files
+$(CLISTM_ESSENTIAL_PATHO_DIR)/system_stm32f4xx.o: $(CLISTM_CMSIS_TEMPLATE)/system_stm32f4xx.c | $(CLISTM_BUILD_PATHS)
 	$(CLISTM_CC) $(CLISTM_CFLAGS) $(CLISTM_CPPFLAGS) -c $< -o $@
 
-$(CLISTM_SYS_PATHO_DIR)/startup.o: $(CLISTM_SYS_DIR)/startup.c | $(CLISTM_BUILD_PATHS)
+$(CLISTM_ESSENTIAL_PATHO_DIR)/startup.o: $(CLISTM_SYS_DIR)/startup.c | $(CLISTM_BUILD_PATHS)
 	$(CLISTM_CC) $(CLISTM_CFLAGS) $(CLISTM_CPPFLAGS) -c $< -o $@
 
-$(CLISTM_SYS_PATHO_DIR)/syscalls.o: $(CLISTM_SYS_DIR)/syscalls.c | $(CLISTM_BUILD_PATHS)
+$(CLISTM_ESSENTIAL_PATHO_DIR)/syscalls.o: $(CLISTM_SYS_DIR)/syscalls.c | $(CLISTM_BUILD_PATHS)
 	$(CLISTM_CC) $(CLISTM_CFLAGS) $(CLISTM_CPPFLAGS) -c $< -o $@
 
-$(CLISTM_SYS_PATHO_DIR)/stm32f4xx_hal.o: $(CLISTM_HAL)/Src/stm32f4xx_hal.c
+$(CLISTM_ESSENTIAL_PATHO_DIR)/stm32f4xx_hal.o: $(CLISTM_HAL)/Src/stm32f4xx_hal.c | $(CLISTM_BUILD_PATHS)
 	$(CLISTM_CC) $(CLISTM_CFLAGS) $(CLISTM_CPPFLAGS) -c $< -o $@
 
-$(CLISTM_SYS_PATHO_DIR)/stm32f4xx_hal_cortex.o: $(CLISTM_HAL)/Src/stm32f4xx_hal_cortex.c
+$(CLISTM_ESSENTIAL_PATHO_DIR)/stm32f4xx_hal_cortex.o: $(CLISTM_HAL)/Src/stm32f4xx_hal_cortex.c | $(CLISTM_BUILD_PATHS)
 	$(CLISTM_CC) $(CLISTM_CFLAGS) $(CLISTM_CPPFLAGS) -c $< -o $@
 
-$(CLISTM_SYS_PATHO_DIR)/stm32f4xx_hal_rcc.o: $(CLISTM_HAL)/Src/stm32f4xx_hal_rcc.c
+$(CLISTM_ESSENTIAL_PATHO_DIR)/stm32f4xx_hal_rcc.o: $(CLISTM_HAL)/Src/stm32f4xx_hal_rcc.c | $(CLISTM_BUILD_PATHS)
 	$(CLISTM_CC) $(CLISTM_CFLAGS) $(CLISTM_CPPFLAGS) -c $< -o $@
 
-
-$(CLISTM_SYS_PATHO_DIR)/$(CLISTM_HAL_SRC_PREFIX)%.o: $(CLISTM_HAL)/Src/$(CLISTM_HAL_SRC_PREFIX)%.c
+# Rule for HAL files
+$(CLISTM_ESSENTIAL_PATHO_DIR)/$(CLISTM_HAL_SRC_PREFIX)%.o: $(CLISTM_HAL)/Src/$(CLISTM_HAL_SRC_PREFIX)%.c | $(CLISTM_BUILD_PATHS)
 	$(CLISTM_CC) $(CLISTM_CFLAGS) $(CLISTM_CPPFLAGS) -c $< -o $@
 
 $(CLISTM_BUILD_PATHS):
@@ -120,7 +130,11 @@ $(CLISTM_BUILD_PATHS):
 flash: $(CLISTM_PROGRAM)
 	$(CLISTM_PROGRAMMER) $(CLISTM_PROGRAMMER_FLAGS) -c "program $(CLISTM_PATHB)/program.elf verify reset exit"
 
+
+# Include all dependancy files
 -include $(CLISTM_USR_DEPS)
+-include $(CLISTM_ESSENTIAL_DEPS)
+-include $(CLISTM_HAL_DEPS)
 
 .PHONY: build flash
 
