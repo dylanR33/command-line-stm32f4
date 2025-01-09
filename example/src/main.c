@@ -32,10 +32,7 @@ static void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLN = 400;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV4;
   RCC_OscInitStruct.PLL.PLLQ = 7;
-  if(HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
-  {
-    //Error_Handler();
-  }
+  HAL_RCC_OscConfig(&RCC_OscInitStruct);
   
   /* Select PLL as system clock source and configure the HCLK, PCLK1 and PCLK2 
      clocks dividers */
@@ -44,10 +41,8 @@ static void SystemClock_Config(void)
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;  
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;  
-  if(HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_3) != HAL_OK)
-  {
-    //Error_Handler();
-  }
+  HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_3);
+  
 }
 
 void main()
@@ -72,14 +67,17 @@ void main()
     HAL_GPIO_Init( gpioa, &gpio_init);
 
     HAL_GPIO_WritePin(gpioa, GPIO_PIN_5, GPIO_PIN_SET);
+    HAL_Delay(2000);
+    HAL_GPIO_WritePin(gpioa, GPIO_PIN_5, GPIO_PIN_RESET);
 
 
-    //while (1)
-    //{
-    //    //HAL_GPIO_TogglePin( gpioa, GPIO_PIN_5);
-    //    HAL_GPIO_WritePin(gpioa, GPIO_PIN_5, GPIO_PIN_RESET);
-    //    HAL_GPIO_WritePin(gpioa, GPIO_PIN_5, GPIO_PIN_SET);
-    //}
+    while (1)
+    {
+        HAL_GPIO_TogglePin( gpioa, GPIO_PIN_5);
+        HAL_Delay(1000);
+        //HAL_GPIO_WritePin(gpioa, GPIO_PIN_5, GPIO_PIN_RESET);
+        //HAL_GPIO_WritePin(gpioa, GPIO_PIN_5, GPIO_PIN_SET);
+    }
 
     //RCC_TypeDef* rcc = (RCC_TypeDef*)RCC;
     //ledPeripheralClockEnable(&(rcc->AHB1ENR), RCC_AHB1ENR_GPIOAEN_Pos);
@@ -98,3 +96,7 @@ void main()
     //}
 }
 
+void systick_handler()
+{
+    HAL_IncTick();
+}
