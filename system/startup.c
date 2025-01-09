@@ -1,3 +1,5 @@
+#include <stdint.h>
+
 // Define start address, size, and end address of SRAM to define the
 // initialization address of the stack pointer which should be initialized
 // to point at the end of SRAM.
@@ -6,7 +8,6 @@
 #define SRAM_END                   ( SRAM_START + SRAM_SIZE )
 #define STACK_POINTER_INIT_ADDRESS ( SRAM_END )
 
-#include <stdint.h>
 #define ISR_VECTOR_SIZE_WORDS 102                                // STM32F411RE Reference Manual Section 10.2
                                                                  
  
