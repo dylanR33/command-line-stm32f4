@@ -2,7 +2,6 @@
 
 #include "stm32f4xx.h"
 #include "stm32f4xx_hal.h"
-#include "stm32f4xx_hal_gpio.h"
 #include "stm32f4xx_hal_rcc.h"
 #include "stm32f4xx_hal_flash_ex.h"
 
@@ -48,24 +47,11 @@ void main()
 
     SystemClock_Config();
 
-    __HAL_RCC_GPIOA_CLK_ENABLE();
-
-    GPIO_TypeDef* gpioa = (GPIO_TypeDef*)GPIOA;
-    GPIO_InitTypeDef gpio_init =
-    {
-
-        .Pin =  GPIO_PIN_5,
-        .Mode = MODE_OUTPUT,
-        .Pull = GPIO_NOPULL,
-        .Speed = GPIO_SPEED_FREQ_MEDIUM,
-    };
-
-    HAL_GPIO_Init( gpioa, &gpio_init);
-
+    // Application code ...
+    
+    // Super loop
     while (1)
     {
-        HAL_GPIO_TogglePin( gpioa, GPIO_PIN_5);
-        HAL_Delay(1000);
     }
 }
 
