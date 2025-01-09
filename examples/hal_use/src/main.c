@@ -5,7 +5,6 @@
 #include "stm32f4xx_hal_gpio.h"
 #include "stm32f4xx_hal_rcc.h"
 #include "stm32f4xx_hal_flash_ex.h"
-#include "led.h"
 
 #define LED_PIN 5
 
@@ -47,7 +46,6 @@ static void SystemClock_Config(void)
 
 void main()
 {
-
     HAL_Init();
 
     SystemClock_Config();
@@ -66,34 +64,11 @@ void main()
 
     HAL_GPIO_Init( gpioa, &gpio_init);
 
-    HAL_GPIO_WritePin(gpioa, GPIO_PIN_5, GPIO_PIN_SET);
-    HAL_Delay(2000);
-    HAL_GPIO_WritePin(gpioa, GPIO_PIN_5, GPIO_PIN_RESET);
-
-
     while (1)
     {
         HAL_GPIO_TogglePin( gpioa, GPIO_PIN_5);
         HAL_Delay(1000);
-        //HAL_GPIO_WritePin(gpioa, GPIO_PIN_5, GPIO_PIN_RESET);
-        //HAL_GPIO_WritePin(gpioa, GPIO_PIN_5, GPIO_PIN_SET);
     }
-
-    //RCC_TypeDef* rcc = (RCC_TypeDef*)RCC;
-    //ledPeripheralClockEnable(&(rcc->AHB1ENR), RCC_AHB1ENR_GPIOAEN_Pos);
-
-    //volatile uint32_t dummy;    // Dummy reads to wait for peripheral clock to be enabled.
-    //dummy = rcc->AHB1ENR;
-    //dummy = rcc->AHB1ENR;
-
-    //GPIO_TypeDef* gpio_a = (GPIO_TypeDef*)GPIOA;
-    //ledOutputMode(&(gpio_a->MODER), GPIO_MODER_MODER5_Pos);
-
-    //while (1)
-    //{
-    //    ledToggle(&(gpio_a->ODR), LED_PIN);
-    //    for (uint32_t i = 0; i < 100000; i++);   // Delay.
-    //}
 }
 
 void Systick_Handler()
