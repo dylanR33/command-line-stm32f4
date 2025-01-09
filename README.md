@@ -80,7 +80,7 @@ The following paths should be defined for the makefile to work correctly.
 ## Optional Variable Definitions
 The variable `CLISTM_HAL_MODULES` is an optional variable and if used should specify the 
 HAL modules the user would like to incorporate into their build (see options 
-[here](#list-of-supported-hal-modules-(definitions-for-clistm_hal_modules))). When used 
+[here](#list-of-supported-hal-modules:-definitions-for-clistm_hal_modules)). When used 
 the makefile also incorporates the base HAL files necessary to use the other modules. 
 If not defined no HAL modules will be part of the build.
 
@@ -118,7 +118,7 @@ STM32F410Tx STM32F415xx STM32F446xx
 ```
 
 
-## List of supported HAL modules (Definitions for CLISTM_HAL_MODULES)
+## List of supported HAL modules: Definitions for CLISTM_HAL_MODULES
 ```
 adc               adc_ex          can
 cec               crc             cryp
