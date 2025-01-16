@@ -14,12 +14,12 @@ MEMORY                                                /* Describes location and 
                                                       /* Describes the memory layout of the output file. */
 SECTIONS                                              /* Controls where input sections are placed into output sections, their order in the output file, and to which output sections they are allocated. */
 {
-    .isr_vector :                                     /* Defines a section in the output file. */
+    .isr_vector ( READONLY ):                         /* Defines a section in the output file. */
     {
         KEEP( *( .isr_vector ) )                      /* KEEP() prevents the input section within it from being eliminated during link-time garbage collection. */
     } >FLASH                                          /* Assigns the sections virtual memory address (VMA) and load memory address (LMA) to this previously defined region in memory. */
 
-    .text : 
+    .text ( READONLY ): 
     {
         . = ALIGN( 4 );                               /* Sets the location counter ('.') to the current location counter value aligned upward to the specified amount of bytes. */
 

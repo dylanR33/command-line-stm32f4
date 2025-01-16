@@ -7,4 +7,4 @@ CLISTM_HAL_MODULES = tim tim_ex gpio dma
 clean:
 	rm -r build
 
-include ../../command_line_stm32.mk
+include ../../command_line_stm32f4.mk

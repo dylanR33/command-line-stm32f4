@@ -6,4 +6,4 @@ CLISTM_MODEL_NUM = STM32F411xE
 clean:
 	rm -r build
 
-include ../../command_line_stm32.mk
+include ../../command_line_stm32f4.mk

@@ -7,4 +7,4 @@ CLISTM_LINKER_FILE = linker_script.ld
 clean:
 	rm -r build
 
-include ../../command_line_stm32.mk
+include ../../command_line_stm32f4.mk

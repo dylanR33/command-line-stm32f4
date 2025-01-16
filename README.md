@@ -1,4 +1,4 @@
-# command_line_stm32
+# command-line-stm32f4
 
 ## Incorperation Into Project
 This repository serves as a drop in setup for projects using the STM32F4 family of 
@@ -9,12 +9,12 @@ cloned externally.
 
 Use the following command to add this repository as a git submodule of your project:
 ```
-git submodule add https://github.com/dylanR33/command_line_stm32.git
+git submodule add https://github.com/dylanR33/command-line-stm32f4.git
 ```
 
 Use the following command to clone this repository into your project:
 ```
-git clone --recurse-submodules https://github.com/dylanR33/command_line_stm32.git
+git clone --recurse-submodules https://github.com/dylanR33/command-line-stm32f4.git
 ```
 
 ## Necessary Software
@@ -36,7 +36,7 @@ Your project should contain a makefile of its own which needs to contain two thi
 
 1. Definitions for the variables outlined in the sections just mentioned
 
-2. Inclusion of the makefile `command_line_stm32.mk` found within this repository
+2. Inclusion of the makefile `command_line_stm32f4.mk` found within this repository
 
 For example:
 ```
@@ -48,10 +48,10 @@ CLISTM_MODEL_NUM = STM32F411xE
 
 CLISTM_HAL_MODULES = gpio
 
-include path_to/command_line_stm32/command_line_stm32.mk
+include path_to/command-line-stm32f4/command_line_stm32f4.mk
 ```
 
-The makefile `command_line_stm32.mk` contains the necessary rules to build your 
+The makefile `command_line_stm32f4.mk` contains the necessary rules to build your 
 source files and flash the executable onto your target hardware. These rules are 
 `build` and `flash` respectively. To invoke them run the following from the 
 directory containing your own makefile.

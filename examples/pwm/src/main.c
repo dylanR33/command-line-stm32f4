@@ -56,9 +56,9 @@ void main()
 
         .Init = 
         {
-            .Prescaler = 0x0000, // Between 0x0000 - 0xFFFF
-            .CounterMode = TIM_COUNTERMODE_UP, // a value of TIM_Counter_Mode
-            .Period = 0x00FF,        // 0x0000 - 0xFFFF
+            .Prescaler = 0x0000,                     // Between 0x0000 - 0xFFFF
+            .CounterMode = TIM_COUNTERMODE_UP,       // a value of TIM_Counter_Mode
+            .Period = 0x00FF,                        // 0x0000 - 0xFFFF
             .ClockDivision = TIM_CLOCKDIVISION_DIV1, // a value of TIM_ClockDivision
         }
     };
