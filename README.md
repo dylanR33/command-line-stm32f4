@@ -23,6 +23,7 @@ The following are software packages necessary to use this repository.
 `arm-none-eabi-gcc`
 `arm-none-eabi-newlib`
 `GNU make`
+`openocd`
 
 Please download them with your preferred package manager.
 
