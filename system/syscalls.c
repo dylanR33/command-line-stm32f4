@@ -1,6 +1,7 @@
 #include <sys/stat.h>
 #include <sys/times.h>
 #include <errno.h>
+#include "usart_print.h"
 #undef errno
 extern int errno;
 
@@ -104,10 +105,8 @@ int _wait(int *status) {
 }
 
 int _write(int file, char *ptr, int len) {
-  int todo;
-
-  for (todo = 0; todo < len; todo++) {
-    //outbyte (*ptr++);
+  for (int i = 0; i < len; i++) {
+    UsartPrint_Write(*ptr++);
   }
   return len;
 }

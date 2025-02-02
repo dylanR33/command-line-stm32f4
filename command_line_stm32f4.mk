@@ -50,7 +50,7 @@ CLISTM_BUILD_PATHS = $(CLISTM_PATHB) $(CLISTM_PATHO) $(CLISTM_PATHO_DIRS)
 
 
 # Essential and optionally HAL source files and corresponding object and dependancy files
-CLISTM_ESSENTIAL_SRCS = system_stm32f4xx.o startup.o syscalls.o
+CLISTM_ESSENTIAL_SRCS = system_stm32f4xx.o startup.o syscalls.o usart_print.o
 ifdef CLISTM_HAL_MODULES
   $(info HAL will be incorporated into build)
   CLISTM_ESSENTIAL_SRCS += stm32f4xx_hal.o stm32f4xx_hal_cortex.o stm32f4xx_hal_rcc.o
@@ -76,7 +76,7 @@ CLISTM_CORE_INCLUDE = $(CLISTM_CMSIS)/Core/Include
 CLISTM_HAL_INCLUDE = $(CLISTM_HAL)/Inc
 CLISTM_USR_INC_PATHS = $(addprefix -I, $(CLISTM_PATHS))
 CLISTM_CPPFLAGS = -MMD -MP -I$(CLISTM_SYS_DIR) -I$(CLISTM_ST_INCLUDE) -I$(CLISTM_CORE_INCLUDE) -I$(CLISTM_HAL_INCLUDE) $(CLISTM_USR_INC_PATHS) -D$(CLISTM_MODEL_NUM)
-CLISTM_LDFLAGS = -T $(CLISTM_LINKER_FILE)
+CLISTM_LDFLAGS = -u  _printf_float -T $(CLISTM_LINKER_FILE)
 
 
 # Output program
@@ -107,6 +107,9 @@ $(CLISTM_ESSENTIAL_PATHO_DIR)/startup.o: $(CLISTM_SYS_DIR)/startup.c | $(CLISTM_
 	$(CLISTM_CC) $(CLISTM_CFLAGS) $(CLISTM_CPPFLAGS) -c $< -o $@
 
 $(CLISTM_ESSENTIAL_PATHO_DIR)/syscalls.o: $(CLISTM_SYS_DIR)/syscalls.c | $(CLISTM_BUILD_PATHS)
+	$(CLISTM_CC) $(CLISTM_CFLAGS) $(CLISTM_CPPFLAGS) -c $< -o $@
+
+$(CLISTM_ESSENTIAL_PATHO_DIR)/usart_print.o: $(CLISTM_SYS_DIR)/usart_print.c | $(CLISTM_BUILD_PATHS)
 	$(CLISTM_CC) $(CLISTM_CFLAGS) $(CLISTM_CPPFLAGS) -c $< -o $@
 
 $(CLISTM_ESSENTIAL_PATHO_DIR)/stm32f4xx_hal.o: $(CLISTM_HAL)/Src/stm32f4xx_hal.c | $(CLISTM_BUILD_PATHS)
