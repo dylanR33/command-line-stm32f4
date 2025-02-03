@@ -8,7 +8,7 @@
 #define SRAM_END                   ( SRAM_START + SRAM_SIZE )
 #define STACK_POINTER_INIT_ADDRESS ( SRAM_END )
 
-#define ISR_VECTOR_SIZE_WORDS 113                                // STM32F411RE Reference Manual Section 10.2
+#define ISR_VECTOR_SIZE_WORDS 102                                // STM32F411RE Reference Manual Section 10.2
                                                                  
  
 // Interrupt Vector Table
@@ -49,10 +49,6 @@ void DMA1_Stream4_Handler()           __attribute__( (weak, alias( "Default_Hand
 void DMA1_Stream5_Handler()           __attribute__( (weak, alias( "Default_Handler" ) ) );
 void DMA1_Stream6_Handler()           __attribute__( (weak, alias( "Default_Handler" ) ) );
 void ADC_Handler()                    __attribute__( (weak, alias( "Default_Handler" ) ) );
-void CAN1_TX_Handler()                __attribute__( (weak, alias( "Default_Handler" ) ) );
-void CAN1_RX0_Handler()               __attribute__( (weak, alias( "Default_Handler" ) ) );
-void CAN1_RX1_Handler()               __attribute__( (weak, alias( "Default_Handler" ) ) );
-void CAN1_SCE_Handler()               __attribute__( (weak, alias( "Default_Handler" ) ) );
 void EXTI9_5_Handler()                __attribute__( (weak, alias( "Default_Handler" ) ) );
 void TIM1_BRK_TIM9_Handler()          __attribute__( (weak, alias( "Default_Handler" ) ) );
 void TIM1_UP_TIM10_Handler()          __attribute__( (weak, alias( "Default_Handler" ) ) );
@@ -69,32 +65,18 @@ void SPI1_Handler()                   __attribute__( (weak, alias( "Default_Hand
 void SPI2_Handler()                   __attribute__( (weak, alias( "Default_Handler" ) ) );
 void USART1_Handler()                 __attribute__( (weak, alias( "Default_Handler" ) ) );
 void USART2_Handler()                 __attribute__( (weak, alias( "Default_Handler" ) ) );
-void USART3_Handler()                 __attribute__( (weak, alias( "Default_Handler" ) ) );
 void EXTI15_10_Handler()              __attribute__( (weak, alias( "Default_Handler" ) ) );
 void EXTI17_RTC_Alarm_Handler()       __attribute__( (weak, alias( "Default_Handler" ) ) );
 void EXTI18_OTG_FS_WKUP_Handler()     __attribute__( (weak, alias( "Default_Handler" ) ) );
-void TIM8_BRK_TIM12_Handler()         __attribute__( (weak, alias( "Default_Handler" ) ) );
-void TIM8_UP_TIM13_Handler()          __attribute__( (weak, alias( "Default_Handler" ) ) );
-void TIM8_TRG_COM_TIM14_Handler()     __attribute__( (weak, alias( "Default_Handler" ) ) );
-void TIM8_CC_Handler()                __attribute__( (weak, alias( "Default_Handler" ) ) );
 void DMA1_Stream7_Handler()           __attribute__( (weak, alias( "Default_Handler" ) ) );
-void FMC_Handler()                    __attribute__( (weak, alias( "Default_Handler" ) ) );
 void SDIO_Handler()                   __attribute__( (weak, alias( "Default_Handler" ) ) );
 void TIM5_Handler()                   __attribute__( (weak, alias( "Default_Handler" ) ) );
 void SPI3_Handler()                   __attribute__( (weak, alias( "Default_Handler" ) ) );
-void UART4_Handler()                  __attribute__( (weak, alias( "Default_Handler" ) ) );
-void UART5_Handler()                  __attribute__( (weak, alias( "Default_Handler" ) ) );
-void TIM6_DAC_Handler()               __attribute__( (weak, alias( "Default_Handler" ) ) );
-void TIM7_Handler()                   __attribute__( (weak, alias( "Default_Handler" ) ) );
 void DMA2_Stream0_Handler()           __attribute__( (weak, alias( "Default_Handler" ) ) );
 void DMA2_Stream1_Handler()           __attribute__( (weak, alias( "Default_Handler" ) ) );
 void DMA2_Stream2_Handler()           __attribute__( (weak, alias( "Default_Handler" ) ) );
 void DMA2_Stream3_Handler()           __attribute__( (weak, alias( "Default_Handler" ) ) );
 void DMA2_Stream4_Handler()           __attribute__( (weak, alias( "Default_Handler" ) ) );
-void CAN2_TX_Handler()                __attribute__( (weak, alias( "Default_Handler" ) ) );
-void CAN2_RX0_Handler()               __attribute__( (weak, alias( "Default_Handler" ) ) );
-void CAN2_RX1_Handler()               __attribute__( (weak, alias( "Default_Handler" ) ) );
-void CAN2_SCE_Handler()               __attribute__( (weak, alias( "Default_Handler" ) ) );
 void OTG_FS_Handler()                 __attribute__( (weak, alias( "Default_Handler" ) ) );
 void DMA2_Stream5_Handler()           __attribute__( (weak, alias( "Default_Handler" ) ) );
 void DMA2_Stream6_Handler()           __attribute__( (weak, alias( "Default_Handler" ) ) );
@@ -102,20 +84,9 @@ void DMA2_Stream7_Handler()           __attribute__( (weak, alias( "Default_Hand
 void USART6_Handler()                 __attribute__( (weak, alias( "Default_Handler" ) ) );
 void I2C3_EV_Handler()                __attribute__( (weak, alias( "Default_Handler" ) ) );
 void I2C3_ER_Handler()                __attribute__( (weak, alias( "Default_Handler" ) ) );
-void OTG_HS_EP1_OUT_Handler()         __attribute__( (weak, alias( "Default_Handler" ) ) );
-void OTG_HS_EP1_IN_Handler()          __attribute__( (weak, alias( "Default_Handler" ) ) );
-void OTG_HS_WKUP_Handler()            __attribute__( (weak, alias( "Default_Handler" ) ) );
-void OTG_HS_Handler()                 __attribute__( (weak, alias( "Default_Handler" ) ) );
-void DCMI_Handler()                   __attribute__( (weak, alias( "Default_Handler" ) ) );
 void FPU_Handler()                    __attribute__( (weak, alias( "Default_Handler" ) ) );
 void SPI4_Handler()                   __attribute__( (weak, alias( "Default_Handler" ) ) );
-void SAI1_Handler()                   __attribute__( (weak, alias( "Default_Handler" ) ) );
-void SAI2_Handler()                   __attribute__( (weak, alias( "Default_Handler" ) ) );
-void QuadSPI_Handler()                __attribute__( (weak, alias( "Default_Handler" ) ) );
-void HDMI_CEC_Handler()               __attribute__( (weak, alias( "Default_Handler" ) ) );
-void SPDIF_RX_Handler()               __attribute__( (weak, alias( "Default_Handler" ) ) );
-void FMPI2C1_Handler()                __attribute__( (weak, alias( "Default_Handler" ) ) );
-void FMPI2C1_Error()                  __attribute__( (weak, alias( "Default_Handler" ) ) );
+void SPI5_Handler()                   __attribute__( (weak, alias( "Default_Handler" ) ) );
 
 // Define isr_vector table.
 // The section attribute ensures that it ends up in the correct memory section.
@@ -156,10 +127,6 @@ uint32_t isr_vector[ISR_VECTOR_SIZE_WORDS] __attribute__( ( section( ".isr_vecto
     ( uint32_t )&DMA1_Stream5_Handler          ,
     ( uint32_t )&DMA1_Stream6_Handler          ,
     ( uint32_t )&ADC_Handler                   ,
-    ( uint32_t )&CAN1_TX_Handler               ,
-    ( uint32_t )&CAN1_RX0_Handler              ,
-    ( uint32_t )&CAN1_RX1_Handler              ,
-    ( uint32_t )&CAN1_SCE_Handler              ,
     ( uint32_t )&EXTI9_5_Handler               ,
     ( uint32_t )&TIM1_BRK_TIM9_Handler         ,
     ( uint32_t )&TIM1_UP_TIM10_Handler         ,
@@ -176,34 +143,18 @@ uint32_t isr_vector[ISR_VECTOR_SIZE_WORDS] __attribute__( ( section( ".isr_vecto
     ( uint32_t )&SPI2_Handler                  ,
     ( uint32_t )&USART1_Handler                ,
     ( uint32_t )&USART2_Handler                ,
-    ( uint32_t )&USART3_Handler                ,
     ( uint32_t )&EXTI15_10_Handler             ,
     ( uint32_t )&EXTI17_RTC_Alarm_Handler      ,
     ( uint32_t )&EXTI18_OTG_FS_WKUP_Handler    ,
-    ( uint32_t )&TIM8_BRK_TIM12_Handler        ,
-    ( uint32_t )&TIM8_UP_TIM13_Handler         ,
-    ( uint32_t )&TIM8_TRG_COM_TIM14_Handler    ,
-    ( uint32_t )&TIM8_CC_Handler               ,
     ( uint32_t )&DMA1_Stream7_Handler          ,
-    ( uint32_t )&FMC_Handler                   ,
     ( uint32_t )&SDIO_Handler                  ,
     ( uint32_t )&TIM5_Handler                  ,
     ( uint32_t )&SPI3_Handler                  ,
-    ( uint32_t )&UART4_Handler                 ,
-    ( uint32_t )&UART5_Handler                 ,
-    ( uint32_t )&TIM6_DAC_Handler              ,
-    ( uint32_t )&TIM7_Handler                  ,
     ( uint32_t )&DMA2_Stream0_Handler          ,
     ( uint32_t )&DMA2_Stream1_Handler          ,
     ( uint32_t )&DMA2_Stream2_Handler          ,
     ( uint32_t )&DMA2_Stream3_Handler          ,
     ( uint32_t )&DMA2_Stream4_Handler          ,
-    0                                          ,
-    0                                          ,
-    ( uint32_t )&CAN2_TX_Handler               ,
-    ( uint32_t )&CAN2_RX0_Handler              ,
-    ( uint32_t )&CAN2_RX1_Handler              ,
-    ( uint32_t )&CAN2_SCE_Handler              ,
     ( uint32_t )&OTG_FS_Handler                ,
     ( uint32_t )&DMA2_Stream5_Handler          ,
     ( uint32_t )&DMA2_Stream6_Handler          ,
@@ -211,29 +162,9 @@ uint32_t isr_vector[ISR_VECTOR_SIZE_WORDS] __attribute__( ( section( ".isr_vecto
     ( uint32_t )&USART6_Handler                ,
     ( uint32_t )&I2C3_EV_Handler               ,
     ( uint32_t )&I2C3_ER_Handler               ,
-    ( uint32_t )&OTG_HS_EP1_OUT_Handler        ,
-    ( uint32_t )&OTG_HS_EP1_IN_Handler         ,
-    ( uint32_t )&OTG_HS_WKUP_Handler           ,
-    ( uint32_t )&OTG_HS_Handler                ,
-    ( uint32_t )&DCMI_Handler                  ,
-    0                                          ,
-    0                                          ,
     ( uint32_t )&FPU_Handler                   ,
-    0                                          ,
-    0                                          ,
     ( uint32_t )&SPI4_Handler                  ,
-    0                                          ,
-    0                                          ,
-    ( uint32_t )&SAI1_Handler                  ,
-    0                                          ,
-    0                                          ,
-    0                                          ,
-    ( uint32_t )&SAI2_Handler                  ,
-    ( uint32_t )&QuadSPI_Handler               ,
-    ( uint32_t )&HDMI_CEC_Handler              ,
-    ( uint32_t )&SPDIF_RX_Handler              ,
-    ( uint32_t )&FMPI2C1_Handler               ,
-    ( uint32_t )&FMPI2C1_Error
+    ( uint32_t )&SPI5_Handler
 };
 
 void Default_Handler()
