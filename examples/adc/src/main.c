@@ -52,43 +52,95 @@ static void SystemClock_Config(void)
   
 }
 
-ADC_HandleTypeDef adcHandle;
+ADC_HandleTypeDef adc1Handle;
+ADC_HandleTypeDef adc2Handle;
+ADC_HandleTypeDef adc3Handle;
 
 void ConfigureADC()
 {
-    ADC_ChannelConfTypeDef adcChannel;
+    ADC_ChannelConfTypeDef adc1Channel;
  
-    adcHandle.Instance = ADC1;
+    adc1Handle.Instance = ADC1;
  
-    adcHandle.Init.ClockPrescaler = ADC_CLOCKPRESCALER_PCLK_DIV2;
-    adcHandle.Init.Resolution = ADC_RESOLUTION_12B;
-    adcHandle.Init.ScanConvMode = DISABLE;
-    adcHandle.Init.ContinuousConvMode = ENABLE;
-    adcHandle.Init.DiscontinuousConvMode = DISABLE;
-    adcHandle.Init.NbrOfDiscConversion = 0;
-    adcHandle.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
-    adcHandle.Init.ExternalTrigConv = ADC_SOFTWARE_START;
-    adcHandle.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-    adcHandle.Init.NbrOfConversion = 1;
-    adcHandle.Init.DMAContinuousRequests = ENABLE;
-    adcHandle.Init.EOCSelection = DISABLE;
+    adc1Handle.Init.ClockPrescaler = ADC_CLOCKPRESCALER_PCLK_DIV2;
+    adc1Handle.Init.Resolution = ADC_RESOLUTION_12B;
+    adc1Handle.Init.ScanConvMode = DISABLE;
+    adc1Handle.Init.ContinuousConvMode = ENABLE;
+    adc1Handle.Init.DiscontinuousConvMode = DISABLE;
+    adc1Handle.Init.NbrOfDiscConversion = 0;
+    adc1Handle.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+    adc1Handle.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+    adc1Handle.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+    adc1Handle.Init.NbrOfConversion = 1;
+    adc1Handle.Init.DMAContinuousRequests = ENABLE;
+    adc1Handle.Init.EOCSelection = DISABLE;
 
  
-    HAL_ADC_Init(&adcHandle);
+    HAL_ADC_Init(&adc1Handle);
      
-    adcChannel.Channel = ADC_CHANNEL_10;
-    adcChannel.Rank = 1;
-    adcChannel.SamplingTime = ADC_SAMPLETIME_480CYCLES;
-    adcChannel.Offset = 0;
+    adc1Channel.Channel = ADC_CHANNEL_10;
+    adc1Channel.Rank = 1;
+    adc1Channel.SamplingTime = ADC_SAMPLETIME_480CYCLES;
+    adc1Channel.Offset = 0;
  
-    HAL_ADC_ConfigChannel(&adcHandle, &adcChannel);
-}
+    HAL_ADC_ConfigChannel(&adc1Handle, &adc1Channel);
 
-uint16_t buff;
 
-void DMA2_Stream0_Handler()
-{
-    printf( "Conversion complete: %d\n", buff );
+    ADC_ChannelConfTypeDef adc2Channel;
+ 
+    adc2Handle.Instance = ADC2;
+ 
+    adc2Handle.Init.ClockPrescaler = ADC_CLOCKPRESCALER_PCLK_DIV2;
+    adc2Handle.Init.Resolution = ADC_RESOLUTION_12B;
+    adc2Handle.Init.ScanConvMode = DISABLE;
+    adc2Handle.Init.ContinuousConvMode = ENABLE;
+    adc2Handle.Init.DiscontinuousConvMode = DISABLE;
+    adc2Handle.Init.NbrOfDiscConversion = 0;
+    adc2Handle.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+    adc2Handle.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+    adc2Handle.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+    adc2Handle.Init.NbrOfConversion = 1;
+    adc2Handle.Init.DMAContinuousRequests = ENABLE;
+    adc2Handle.Init.EOCSelection = DISABLE;
+
+ 
+    HAL_ADC_Init(&adc2Handle);
+     
+    adc2Channel.Channel = ADC_CHANNEL_11;
+    adc2Channel.Rank = 1;
+    adc2Channel.SamplingTime = ADC_SAMPLETIME_480CYCLES;
+    adc2Channel.Offset = 0;
+ 
+    HAL_ADC_ConfigChannel(&adc2Handle, &adc2Channel);
+
+
+    ADC_ChannelConfTypeDef adc3Channel;
+ 
+    adc3Handle.Instance = ADC3;
+ 
+    adc3Handle.Init.ClockPrescaler = ADC_CLOCKPRESCALER_PCLK_DIV2;
+    adc3Handle.Init.Resolution = ADC_RESOLUTION_12B;
+    adc3Handle.Init.ScanConvMode = DISABLE;
+    adc3Handle.Init.ContinuousConvMode = ENABLE;
+    adc3Handle.Init.DiscontinuousConvMode = DISABLE;
+    adc3Handle.Init.NbrOfDiscConversion = 0;
+    adc3Handle.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+    adc3Handle.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+    adc3Handle.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+    adc3Handle.Init.NbrOfConversion = 1;
+    adc3Handle.Init.DMAContinuousRequests = ENABLE;
+    adc3Handle.Init.EOCSelection = DISABLE;
+
+ 
+    HAL_ADC_Init(&adc3Handle);
+     
+    adc3Channel.Channel = ADC_CHANNEL_12;
+    adc3Channel.Rank = 1;
+    adc3Channel.SamplingTime = ADC_SAMPLETIME_480CYCLES;
+    adc3Channel.Offset = 0;
+ 
+    HAL_ADC_ConfigChannel(&adc3Handle, &adc3Channel);
+
 }
 
 void main()
@@ -101,63 +153,46 @@ void main()
 
     ConfigureADC();
 
-
-    HAL_ADC_Start_DMA( &adcHandle, (uint32_t*)&buff, sizeof( buff ) );
+    HAL_ADC_Start( &adc1Handle );
+    HAL_ADC_Start( &adc2Handle );
+    HAL_ADC_Start( &adc3Handle );
 
     while (1)
     {
+        HAL_ADC_PollForConversion( &adc1Handle, 1000 );
+        printf("ADC1: %d\n", HAL_ADC_GetValue( &adc1Handle ) );
+        
+        HAL_ADC_PollForConversion( &adc2Handle, 1000 );
+        printf("ADC2: %d\n", HAL_ADC_GetValue( &adc2Handle ) );
+
+        HAL_ADC_PollForConversion( &adc3Handle, 1000 );
+        printf("ADC3: %d\n", HAL_ADC_GetValue( &adc3Handle ) );
+
+        printf("\n");
+        HAL_Delay(100);
+
     }
 
 }
-
-DMA_HandleTypeDef dma_init;
 
 void HAL_ADC_MspInit(ADC_HandleTypeDef *hadc)
 {
     // Enable adc clock __HAL_RCC_ADC_CLK_ENABLE()
     __HAL_RCC_ADC1_CLK_ENABLE();
+    __HAL_RCC_ADC2_CLK_ENABLE();
+    __HAL_RCC_ADC3_CLK_ENABLE();
 
     // Enable gpio port clocks
     __HAL_RCC_GPIOC_CLK_ENABLE();
 
     GPIO_InitTypeDef gpio_init =
     {
-        .Pin = GPIO_PIN_0,
+        .Pin = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2,
         .Mode = GPIO_MODE_ANALOG,
         .Pull = GPIO_NOPULL
     };
 
     HAL_GPIO_Init(GPIOC, &gpio_init);
-
-
-    // DMA
-
-    // Enable DMA2 interface clock
-    __HAL_RCC_DMA2_CLK_ENABLE();
-    
-    // Config DMA then call dma init
-    dma_init.Instance = DMA2_Stream0;
-    dma_init.Init.Channel = DMA_CHANNEL_0;
-    dma_init.Init.Direction = DMA_PERIPH_TO_MEMORY;
-    dma_init.Init.PeriphInc = DMA_PINC_DISABLE;
-    dma_init.Init.MemInc = DMA_MINC_ENABLE;
-    dma_init.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
-    dma_init.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
-    dma_init.Init.Mode = DMA_CIRCULAR;
-    dma_init.Init.Priority = DMA_PRIORITY_HIGH;
-    dma_init.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
-    dma_init.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_FULL;
-    dma_init.Init.MemBurst = DMA_MBURST_SINGLE;
-    dma_init.Init.PeriphBurst = DMA_PBURST_SINGLE;
-
-    HAL_DMA_Init( &dma_init );
-
-    // Configure priority and enable NVIC for transfer complete interrupt on DMA stream
-    HAL_NVIC_SetPriority( DMA2_Stream0_IRQn , 1, 1 );
-    HAL_NVIC_EnableIRQ( DMA2_Stream0_IRQn );
-
-    // Sets the adc handles member pointer (DMA_Handle) to a dma handle to the one configured above
-    __HAL_LINKDMA( hadc, DMA_Handle, dma_init );
 }
 
 void Systick_Handler()
