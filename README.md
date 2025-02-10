@@ -86,8 +86,13 @@ HAL files necessary to use the other modules. If not defined no HAL modules will
 
 The variable `CLISTM_LINKER_FILE` is an optional variable which defines the path to a user 
 provided linker file to use during the linking process. If not defined a default linker file is 
-used which is targeted for the `STM32F411xE`. See directory `templates` for a linker file 
+used which is targeted for the `STM32F446xx`. See directory `templates` for a linker file 
 template to use as a starting point. The main changes necessary are within the `MEMORY` section.
+
+The variable `CLISTM_STARTUP_FILE` is an optional variable which defines the path to a user 
+provided startup file to use for compilation. If not defined a default startup file is used 
+which is targeted for the `STM32F446xx`. See directory `templates` for a startup file template 
+to use as a starting point.
 
 
 ## Minimal Necessary Configuration When Using HAL and Template
@@ -98,7 +103,7 @@ and Systick_Handler() definition for using the HAL provided HAL_Delay() function
 
 
 ## Templates
-Some files to get you started for a main and a linker file.
+Some files to get you started for a main, linker, and startup file.
 
 
 ## Examples
