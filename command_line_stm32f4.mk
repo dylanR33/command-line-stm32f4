@@ -33,10 +33,6 @@ CLISTM_HAL = $(CLISTM_THIS_MAKEFILE_DIR)STM32CubeF4/Drivers/STM32F4xx_HAL_Driver
 CLISTM_HAL_SRC_PREFIX = stm32f4xx_hal_
 
 
-# Default startup file if not already set by user
-CLISTM_STARTUP_FILE ?= $(CLISTM_SYS_DIR)/startup.c
-
-
 # Default linker script path if not already set by user
 CLISTM_LINKER_FILE ?= $(CLISTM_SYS_DIR)/linker_script.ld
 
@@ -55,7 +51,10 @@ CLISTM_BUILD_PATHS = $(CLISTM_PATHB) $(CLISTM_PATHO) $(CLISTM_PATHO_DIRS)
 
 
 # Essential and optionally HAL source files and corresponding object and dependancy files
-CLISTM_SYS_SRCS = system_stm32f4xx.o startup.o syscalls.o usart_print.o
+CLISTM_SYS_SRCS = system_stm32f4xx.o syscalls.o usart_print.o
+ifndef CLISTM_STARTUP_FILE
+CLISTM_SYS_SRCS += startup.o
+endif
 CLISTM_SYS_OBJS = $(addprefix $(CLISTM_SYS_PATHO)/, $(CLISTM_SYS_SRCS))
 CLISTM_SYS_DEPS = $(patsubst %.o, %.d, $(CLISTM_SYS_OBJS))
 
@@ -68,7 +67,7 @@ endif
 
 
 # User source fles and corresponding object and dependancy files
-CLISTM_USR_SRCS = $(foreach clistm_dir, $(CLISTM_PATHS), $(wildcard $(clistm_dir)/*.c))
+CLISTM_USR_SRCS = $(foreach clistm_dir, $(CLISTM_PATHS), $(wildcard $(clistm_dir)/*.c)) $(CLISTM_STARTUP_FILE)
 CLISTM_USR_OBJS = $(patsubst %.c, $(CLISTM_PATHO)/%.o, $(CLISTM_USR_SRCS))
 CLISTM_USR_DEPS = $(patsubst %.c, $(CLISTM_PATHO)/%.d, $(CLISTM_USR_SRCS))
 
