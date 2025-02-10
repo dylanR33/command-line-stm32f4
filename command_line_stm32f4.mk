@@ -3,8 +3,10 @@
 # CLISTM_BUILD_DIR: top level build directory
 # CLISTM_MODEL_NUM: specific stm mcu model within F4 family
 #
-# Optional Define
+# Optional Defines
 # CLISTM_HAL_MODULES: HAL modules to incorporate into build
+# CLISTM_LINKER_FILE: User provided linker file
+# CLISTM_STARTUP_FILE: User provided startup file
 #
 # Ensure necessary defines exist, else exit
 ifndef CLISTM_SRC_DIRS
@@ -50,7 +52,7 @@ CLISTM_PATHO_DIRS = $(addprefix $(CLISTM_PATHO)/, $(CLISTM_PATHS)) $(CLISTM_SYS_
 CLISTM_BUILD_PATHS = $(CLISTM_PATHB) $(CLISTM_PATHO) $(CLISTM_PATHO_DIRS)
 
 
-# Essential and optionally HAL source files and corresponding object and dependancy files
+# System source, object, and dependancy files
 CLISTM_SYS_SRCS = system_stm32f4xx.o syscalls.o usart_print.o
 ifndef CLISTM_STARTUP_FILE
 CLISTM_SYS_SRCS += startup.o
@@ -58,6 +60,8 @@ endif
 CLISTM_SYS_OBJS = $(addprefix $(CLISTM_SYS_PATHO)/, $(CLISTM_SYS_SRCS))
 CLISTM_SYS_DEPS = $(patsubst %.o, %.d, $(CLISTM_SYS_OBJS))
 
+
+# HAL source, object, and dependancy files
 ifdef CLISTM_HAL_MODULES
   $(info HAL will be incorporated into build)
   CLISTM_HAL_MODULES += cortex rcc
@@ -104,7 +108,7 @@ $(CLISTM_PROGRAM): $(CLISTM_USR_OBJS) $(CLISTM_SYS_OBJS) $(CLISTM_HAL_OBJS) | $(
 $(CLISTM_PATHO)/%.o: %.c | $(CLISTM_BUILD_PATHS)
 	$(CLISTM_CC) $(CLISTM_CFLAGS) $(CLISTM_CPPFLAGS) -c $< -o $@
 
-# Rule for main CMSIS system file
+# Rule for CMSIS system file
 $(CLISTM_SYS_PATHO)/system_stm32f4xx.o: $(CLISTM_CMSIS_TEMPLATE)/system_stm32f4xx.c | $(CLISTM_BUILD_PATHS)
 	$(CLISTM_CC) $(CLISTM_CFLAGS) $(CLISTM_CPPFLAGS) -c $< -o $@
 
