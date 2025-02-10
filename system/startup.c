@@ -8,7 +8,7 @@
 #define SRAM_END                   ( SRAM_START + SRAM_SIZE )
 #define STACK_POINTER_INIT_ADDRESS ( SRAM_END )
 
-#define ISR_VECTOR_SIZE_WORDS 113                                // STM32F411RE Reference Manual Section 10.2
+#define ISR_VECTOR_SIZE_WORDS 113
                                                                  
  
 // Interrupt Vector Table
@@ -273,7 +273,5 @@ void Reset_Handler()
     // Call main function.
     main();
 }
-
-
 
 
