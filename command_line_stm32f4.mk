@@ -61,8 +61,8 @@ CLISTM_SYS_DEPS = $(patsubst %.o, %.d, $(CLISTM_SYS_OBJS))
 
 ifdef CLISTM_HAL_MODULES
   $(info HAL will be incorporated into build)
-  CLISTM_HAL_MODULES += hal cortex rcc
-  CLISTM_HAL_OBJS = $(addsuffix .o, $(addprefix $(CLISTM_HAL_PATHO)/$(CLISTM_HAL_SRC_PREFIX), $(CLISTM_HAL_MODULES)))
+  CLISTM_HAL_MODULES += cortex rcc
+  CLISTM_HAL_OBJS = $(addsuffix .o, $(CLISTM_HAL_PATHO)/stm32f4xx_hal $(addprefix $(CLISTM_HAL_PATHO)/$(CLISTM_HAL_SRC_PREFIX), $(CLISTM_HAL_MODULES)))
   CLISTM_HAL_DEPS = $(patsubst %.o, %.d, $(CLISTM_HAL_OBJS))
 endif
 
