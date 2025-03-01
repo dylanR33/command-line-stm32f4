@@ -9,15 +9,15 @@ void UsartPrint_Init()
     RCC->APB1ENR |= ( 1 << RCC_APB1ENR_USART2EN_Pos );
     
     // Dummy reads
-    volatile uint32_t dummy;
-    dummy = RCC->APB1ENR;
-    dummy = RCC->APB1ENR;
+    RCC->APB1ENR = RCC->APB1ENR;
+    RCC->APB1ENR = RCC->APB1ENR;
 
     // Enable GPIOA clock
     RCC->AHB1ENR |= ( 1 << RCC_AHB1ENR_GPIOAEN_Pos );
 
-    dummy = RCC->AHB1ENR;
-    dummy = RCC->AHB1ENR;
+    // Dummy reads
+    RCC->APB1ENR = RCC->APB1ENR;
+    RCC->APB1ENR = RCC->APB1ENR;
 
     // Set PA2 and PA3 to alternate function mode
     GPIOA->MODER &= ~( GPIO_MODER_MODE2_Msk | GPIO_MODER_MODE3_Msk  );
