@@ -94,6 +94,9 @@ provided startup file to use for compilation. If not defined a default startup f
 which is targeted for the `STM32F446xx`. See directory `templates` for a startup file template 
 to use as a starting point.
 
+The variable `CLISTM_WFLAGS` is an optional variable which defines warning flags 
+to pass to the compiler. Can also be used for additional compiler flags.
+
 
 ## Minimal Necessary Configuration When Using HAL and Template
 Before any application or HAL peripheral module code runs the user should call the 
