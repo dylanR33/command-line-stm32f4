@@ -41,7 +41,7 @@ static void SystemClock_Config(void)
   
 }
 
-void main()
+int main()
 {
     HAL_Init();
 
@@ -53,6 +53,8 @@ void main()
     while (1)
     {
     }
+
+    return 0;
 }
 
 void Systick_Handler()
