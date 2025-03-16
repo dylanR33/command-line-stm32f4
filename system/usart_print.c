@@ -3,7 +3,16 @@
 #include "stm32f4xx.h"
 #include <stdint.h>
 
-void UsartPrint_Init()
+
+#define OVERSAMPLING_16 16
+
+#define OVERSAMPLING_8  8
+
+#define BAUD 115200
+
+static uint32_t CalculateBRR( uint32_t apb1_freq );
+
+void UsartPrint_Init( uint32_t apb1_freq )
 {
     // Enable USART2 clock
     RCC->APB1ENR |= ( 1 << RCC_APB1ENR_USART2EN_Pos );
@@ -28,14 +37,24 @@ void UsartPrint_Init()
     GPIOA->AFR[0] |= ( ( 7 <<  GPIO_AFRL_AFSEL2_Pos ) | ( 7 << GPIO_AFRL_AFSEL3_Pos ) );
 
     // Set baud rate, enable usart and tx
-    USART2->BRR = 434;
+    USART2->BRR = CalculateBRR( apb1_freq );
     USART2->CR1 |= USART_CR1_UE | USART_CR1_TE;
 
     USART2->DR = 0;
     while ( !( USART2->SR & USART_SR_TC ) );
 }
 
-// TODO: incorporate DMA
+static uint32_t CalculateBRR( uint32_t apb1_freq )
+{
+    uint8_t oversampling = 0;
+    if ( USART2->CR1 & USART_CR1_OVER8_Msk )
+        oversampling = OVERSAMPLING_8;
+    else
+        oversampling = OVERSAMPLING_16;
+
+    return ( apb1_freq / ( oversampling * BAUD ) ) << 4;
+}
+
 void UsartPrint_Write( char c )
 {
     USART2->DR = c;
